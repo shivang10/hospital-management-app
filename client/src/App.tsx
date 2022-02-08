@@ -1,8 +1,15 @@
+import React from "react";
+
+import {BrowserRouter as Router} from "react-router-dom";
+
+import Homepage from "./homepage/homepage";
+
+
 function App() {
     return (
-        <div>
-            App init
-        </div>
+        <Router>
+            <Homepage></Homepage>
+        </Router>
     );
 }
 
