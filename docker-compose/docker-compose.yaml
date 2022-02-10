@@ -1,0 +1,16 @@
+version: '3'
+services:
+  client-image:
+    container_name: client-image
+    image: client-image
+    build:
+      context: ../client
+    ports:
+      - "3000:3000"
+  server-image:
+    container_name: server-image
+    image: server-image
+    build:
+      context: ../server
+    ports:
+      - "5000:5000"
