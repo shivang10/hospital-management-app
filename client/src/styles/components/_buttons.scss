@@ -1,0 +1,81 @@
+$sizes: 12px, 16px, 18px;
+
+$buttonsType: (
+        add:(
+                btn-color: $color-success,
+                btn-border: transparent,
+                btn-border-size: 0,
+        ),
+        delete: (
+                btn-color: $color-danger,
+                btn-border: transparent,
+                btn-border-size: 0,
+        ),
+        edit: (
+                btn-color: $color-edit,
+                btn-border: transparent,
+                btn-border-size: 0,
+        )
+);
+
+%btn-properties {
+  font-weight: 500;
+  text-decoration: none;
+
+  padding: 0.4rem 1rem;
+  margin: 0.5rem 0;
+
+  display: inline-block;
+
+  border-radius: 1px;
+
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    box-shadow: 0 0.3rem 0.5rem $color-shadow-2;
+  }
+}
+
+@each $buttonType, $buttonProperties in $buttonsType {
+  @each $size in $sizes {
+    .btn-#{$buttonType}-#{$size} {
+      &,
+      &:link,
+      &:visited {
+        @extend %btn-properties;
+        font-size: $size;
+
+        color: $color-white;
+        background-color: map-get($buttonProperties, "btn-color");
+
+        border: map-get($buttonProperties, "btn-border-size") solid map-get($buttonProperties, "btn-border");
+      }
+    }
+
+    .btn-#{$buttonType}-#{$size}-revert {
+      &,
+      &:link,
+      &:visited {
+        @extend %btn-properties;
+        font-size: $size;
+
+        background-color: $color-white;
+        color: map-get($buttonProperties, "btn-color");
+
+        border: map-get($buttonProperties, "btn-border-size") solid map-get($buttonProperties, "btn-border");
+      }
+    }
+  }
+}
+
+.buttonsGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonsGroupVertical {
+  display: flex;
+  flex-direction: column;
+}
