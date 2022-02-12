@@ -79,3 +79,96 @@ $buttonsType: (
   display: flex;
   flex-direction: column;
 }
+
+
+@each $size in $sizes {
+  .btn-changeTextOnHover-#{$size} {
+    font-size: 16px;
+    font-weight: 300;
+    border-radius: 100px;
+    border: none;
+    background-image: linear-gradient(to right, $color-theme-2, $color-theme-4);
+    color: $color-white;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+
+    & > * {
+      display: inline-block;
+      height: 100%;
+      transition: all 0.2s;
+    }
+
+    &__visible {
+      padding: 8px 12px;
+    }
+
+    &__invisible {
+      position: absolute;
+      left: 0;
+      top: -100%;
+      padding: 8px 0;
+      width: 100%;
+    }
+
+    &:hover {
+      background-image: linear-gradient(to left, $color-theme-2, $color-theme-4);
+    }
+
+    &:hover &__visible {
+      transform: translateY(100%);
+    }
+
+    &:hover &__invisible {
+      top: 0;
+    }
+  }
+}
+
+@each $size in $sizes {
+  .btn-transition-#{$size} {
+    font-weight: 500;
+    text-decoration: none;
+
+    background-color: $color-theme-3;
+    border: none;
+    position: relative;
+
+    cursor: pointer;
+    user-select: none;
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 3px;
+      background-color: $color-theme-1;
+      transform: scaleY(0);
+      transition: transform 0.2s, width 0.4s cubic-bezier(1, 0, 0, 1) 0.2s, background-color 0.1s;
+    }
+
+    &:hover::before,
+    .btn-transition--active::before {
+      transform: scaleY(1);
+      width: 100%;
+    }
+
+    &:active::before {
+      background-color: $color-theme-3;
+    }
+
+    &__link:link,
+    &__link:visited {
+      color: $color-white;
+      text-decoration: none;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
