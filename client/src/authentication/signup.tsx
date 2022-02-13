@@ -2,18 +2,19 @@ import React, {useState} from "react";
 
 import { gql, useMutation } from "@apollo/client";
 
+import { UserSignupDetailsInterface } from "./authInterface";
+
 const CREATE_USER_MUTATION = gql`
     mutation CreateUser($input: CreateUserInput!){
         createUser(input: $input) {
             name
-            id
         }
     }
 `;
 
 const SignUp: React.FC = () => {
 
-    const [userDetails, setUserDetails] = useState({
+    const [userDetails, setUserDetails] = useState<UserSignupDetailsInterface>({
         name: "",
         username: "",
         age: 0,
@@ -32,7 +33,12 @@ const SignUp: React.FC = () => {
     const handleCreateUser = () => {
         createUser({
             variables:{
-                input: userDetails
+                input: {
+                    name: userDetails.name,
+                    username: userDetails.username,
+                    age: Number(userDetails.age),
+                    password: userDetails.password
+                }
             }
         });
     };
