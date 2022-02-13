@@ -1,4 +1,4 @@
-import {gql} from "apollo-server"
+const {gql} = require("apollo-server");
 
 const typeDefs = gql`
     type User{
@@ -23,5 +23,6 @@ const typeDefs = gql`
         password:String!
         age:Int!
     }
-`
-export {typeDefs}
+`;
+
+module.exports = typeDefs;
