@@ -2,12 +2,12 @@ import React from "react";
 
 import {BrowserRouter as Router} from "react-router-dom";
 
-import Homepage from "./homepage/homepage";
+import Routes from "./routes/routes";
 
 function App() {
     return (
         <Router>
-            <Homepage/>
+            <Routes/>
         </Router>
     );
 }
