@@ -44,17 +44,17 @@ const SignUp: React.FC = () => {
     };
 
     return(
-        <div>
-            <div>
+        <div className="auth">
+            <div className="title">
+                <h1> HOSPITAL MANAGEMENT APPLICATION</h1>
+            </div>
+            <div className="details">
                 <input type="text" placeholder="Name" name="name" onChange={handleChange}/>
-
                 <input type="text" placeholder="UserName" name="username" onChange={handleChange}/>
-
                 <input type="password" placeholder="Password" name="password" onChange={handleChange}/>
-
                 <input type="number" placeholder="Age" name="age" onChange={handleChange}/>
-
-                <button onClick={handleCreateUser}>Create Uesr</button>
+                
+                <button onClick={handleCreateUser}>Create User</button>
             </div>  
         </div>
     );

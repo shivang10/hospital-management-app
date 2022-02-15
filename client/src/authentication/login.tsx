@@ -39,12 +39,17 @@ const Login: React.FC = () => {
 
     return(
         <div>
-            <div>
-                <input type="text" placeholder="UserName" name="username" onChange={handleChange}/>
+            <div className="auth">
+                <div className="title">
+                    <h1> HOSPITAL MANAGEMENT APPLICATION</h1>
+                </div>
+                <div className="details">
+                    <input type="text" placeholder="UserName" name="username" onChange={handleChange}/>
 
-                <input type="password" placeholder="Password" name="password" onChange={handleChange}/>
+                    <input type="password" placeholder="Password" name="password" onChange={handleChange}/>
 
-                <button onClick={handleLogin}>Login</button>
+                    <button onClick={handleLogin}>Login</button>
+                </div>
             </div>
         </div>
     );
