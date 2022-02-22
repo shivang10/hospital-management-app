@@ -1,4 +1,6 @@
 const {UserSchema} = require("../mongoDbSchema/UserSchema.js");
+const {DoctorSchema} = require("../mongoDbSchema/DoctorSchema");
+const {processInputData} = require("../functions/processUserData");
 const bcrypt = require("bcryptjs");
 
 const resolvers = {
@@ -50,6 +52,66 @@ const resolvers = {
                         resolve(newUser);
                     }
                 });
+            });
+        },
+        updateUser: (parent, args) => {
+            const user = args.input;
+            const processedUserData = processInputData(user);
+            const userId = user.id;
+            return new Promise((resolve, reject) => {
+                UserSchema.findOneAndReplace(
+                    {_id: userId},
+                    {$set: {processedUserData}},
+                    {upsert: true, new: true},
+                    (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    },
+                );
+            });
+        },
+        createDoctor: (parent, args) => {
+            const doctor = args.input;
+            const saltRounds = bcrypt.genSaltSync(10);
+            const pwd = bcrypt.hashSync(doctor.password, saltRounds);
+
+            const newDoctor = new DoctorSchema({
+                name: doctor.name,
+                username: doctor.username,
+                password: pwd,
+            });
+
+            doctor.id = newDoctor._id;
+            return new Promise((resolve, reject) => {
+                newDoctor.save((err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(newDoctor);
+                    }
+                });
+            });
+        },
+        updateDoctor: (parent, args) => {
+            const doctor = args.input;
+            const processedUserData = processInputData(doctor);
+            const userId = doctor.id;
+            return new Promise((resolve, reject) => {
+                DoctorSchema.findOneAndReplace(
+                    {_id: userId},
+                    {$set: {processedUserData}},
+                    {upsert: true, new: true},
+                    (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    },
+                );
             });
         },
     },
