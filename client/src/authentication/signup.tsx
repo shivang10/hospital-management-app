@@ -44,17 +44,39 @@ const SignUp: React.FC = () => {
     };
 
     return(
-        <div className="auth">
-            <div className="title">
-                <h1> HOSPITAL MANAGEMENT APPLICATION</h1>
+        <div className="split-screen">
+            <div className="left">
+                <section className="heading">
+                    <h1>HOSPITAL MANAGEMENT APPLICATION</h1>
+                    <p>Over 1000 + trained professional Doctors available.</p>
+                </section>
             </div>
-            <div className="details">
-                <input type="text" placeholder="Name" name="name" onChange={handleChange}/>
-                <input type="text" placeholder="UserName" name="username" onChange={handleChange}/>
-                <input type="password" placeholder="Password" name="password" onChange={handleChange}/>
-                <input type="number" placeholder="Age" name="age" onChange={handleChange}/>
-                
-                <button onClick={handleCreateUser}>Create User</button>
+            <div className="right">
+                <div className="form">
+                    <section className="heading">
+                        <h2>Sign Up</h2>
+                        <div className="login-container">
+                            <p>Already have an account?<a href="/login"><strong>Log In</strong></a></p>
+                        </div>
+                    </section>
+                    <div>
+                        <label className="input-label">Name</label>
+                        <input className="input-text-width-100" type="text" placeholder="Name" name="name" onChange={handleChange}/>
+                    </div>
+                    <div>
+                        <label className="input-label">Username</label>
+                        <input className="input-text-width-100" type="text" placeholder="UserName" name="username" onChange={handleChange}/>
+                    </div>
+                    <div>
+                        <label className="input-label">Password</label>
+                        <input className="input-text-width-100" type="password" placeholder="Password" name="password" onChange={handleChange}/>
+                    </div>
+                    <div>
+                        <label className="input-label">Age</label>
+                        <input className="input-text-width-100" type="number" placeholder="Age" name="age" onChange={handleChange}/>
+                    </div>
+                    <button className="btn-add-16px" onClick={handleCreateUser}>Create User</button>
+                </div>
             </div>  
         </div>
     );

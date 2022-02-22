@@ -1,0 +1,67 @@
+$widthTypes: (
+        width-100: 100%,
+        width-75: 75%,
+        width-50: 50%,
+        width-25: 25%
+);
+%input-text-properties{
+    display: block;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid $color-theme-1;
+    padding: 1em;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+    &:hover, &:focus-within{
+        border: 1px solid $color-theme-4;
+    }
+}
+
+@each $widthType, $width in $widthTypes{
+    .input-text-#{$widthType}{
+        @extend %input-text-properties;
+        width: $width;
+    }
+}
+
+.input-label{
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.input-checkbox{
+   position: relative;
+   width: 40px;
+   height: 20px;
+   border-radius: 10px;
+   background-color: rgba($color: $color-theme-3, $alpha: 0.3);
+   box-shadow: inset -1px -1px 3px rgba(lighten($color-black, 70%),0.3), inset, 1px 1px;
+   appearance: none;
+   cursor: pointer;
+   transition: background-color .4s;
+
+   &::before{
+       content: '';
+       display: block;
+       position: absolute;
+       top: 50%;
+       left: 0;
+       transform: translate(-5px, -50%);
+       width: 22px;
+       height: 22px;
+       border-radius: 50%;
+       background-color: $color-off-white-1;
+       box-shadow: 1px 1px 2px rgba($color: $color-black, $alpha: .15), 
+       inset 1px 1px 2px lighten($color-off-white-1, 10%), inset -1px -1px 2px 
+       rgba($color-black, 0.3);
+       transition: transform .4s;
+   }
+
+   &:checked{
+       background-color: $color-theme-3;
+       &:before{
+           transform: translate(22px, -50%);
+       }
+   }
+}
