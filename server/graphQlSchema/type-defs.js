@@ -8,12 +8,12 @@ const typeDefs = gql`
         password:String!
         age:Int!
         address: String
-        phoneNumber: Number
+        phoneNumber: Int
         careTakerName: String
-        careTakerNumber: Number
+        careTakerNumber: Int
         gender: Gender
-        weight: Number
-        identityProof: IdentityProof
+        weight: Int
+        identityProof: IdentityProofType
     }
     
     type Doctor {
@@ -69,13 +69,12 @@ const typeDefs = gql`
         password:String
         age:Int
         address: String
-        phoneNumber: Number
+        phoneNumber: Int
         careTakerName: String
-        careTakerNumber: Number
+        careTakerNumber: Int
         gender: Gender
-        weight: Number
-        weight: Number
-        identityProof: IdentityProof
+        weight: Int
+        identityProof: IdentityProofInput
     }
     
     input CreateDoctorInput {
@@ -96,6 +95,12 @@ const typeDefs = gql`
         gender: Gender
         speciality: String
         domain: String
+    }
+
+    input IdentityProofInput {
+        id: ID!
+        data: String
+        contentType: String
     }
 `;
 
