@@ -2,6 +2,8 @@ const {UserSchema} = require("../mongoDbSchema/UserSchema.js");
 const {DoctorSchema} = require("../mongoDbSchema/DoctorSchema");
 const {processInputData} = require("../functions/processUserData");
 const bcrypt = require("bcryptjs");
+const userSchemaFields = require("../constants/userSchemaFields");
+const doctorSchemaFields = require("../constants/doctorSchemaFields");
 
 const resolvers = {
     Query: {
@@ -56,7 +58,7 @@ const resolvers = {
         },
         updateUser: (parent, args) => {
             const user = args.input;
-            const processedUserData = processInputData(user);
+            const processedUserData = processInputData(user, userSchemaFields);
             const userId = user.id;
             return new Promise((resolve, reject) => {
                 UserSchema.findOneAndReplace(
@@ -97,7 +99,7 @@ const resolvers = {
         },
         updateDoctor: (parent, args) => {
             const doctor = args.input;
-            const processedUserData = processInputData(doctor);
+            const processedUserData = processInputData(doctor, doctorSchemaFields);
             const userId = doctor.id;
             return new Promise((resolve, reject) => {
                 DoctorSchema.findOneAndReplace(
