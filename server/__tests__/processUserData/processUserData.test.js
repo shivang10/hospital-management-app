@@ -1,4 +1,4 @@
-const processUserData = require("../functions/processUserData");
+const processUserData = require("../../functions/processUserData");
 const {userDataWithFewFields,
     userDataWithFewFieldsResult,
     userDataWithNoField,
@@ -8,8 +8,8 @@ const {userDataWithFewFields,
     doctorDataWithFewFields,
     doctorDataWithFewFieldsResult,
 } = require("./processUser.data");
-const userSchemaFields = require("../constants/userSchemaFields");
-const doctorSchemaFields = require("../constants/doctorSchemaFields");
+const userSchemaFields = require("../../constants/userSchemaFields");
+const doctorSchemaFields = require("../../constants/doctorSchemaFields");
 
 describe("tests for process user data", () => {
     test("tests if no data is there", () => {
