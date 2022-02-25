@@ -1,4 +1,4 @@
-const {ApolloServer} = require("apollo-server-express");
+// const {ApolloServer} = require("apollo-server-express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -6,6 +6,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const resolvers = require("./graphQlSchema/resolvers");
 const typeDefs = require("./graphQlSchema/type-defs");
+const {graphqlHTTP} = require("express-graphql");
+const {buildSchema} = require("graphql");
 
 dotenv.config();
 
@@ -22,30 +24,46 @@ mongoose.connection.once("open", () => {
     console.log("connected to database");
 });
 
-async function startApolloServer(typeDefs, resolvers) {
-    const server = new ApolloServer({typeDefs, resolvers});
-    const app = express();
-    app.use(bodyParser.json());
-    app.use(cors());
+const schema = buildSchema(typeDefs);
+// async function startApolloServer(typeDefs, resolvers) {
+//     const server = new ApolloServer({typeDefs, resolvers});
+//     const app = express();
+//     app.use(bodyParser.json());
+//     app.use(cors());
 
-    await server.start();
-    server.applyMiddleware({app, path: "/graphql"});
+//     await server.start();
+//     server.applyMiddleware({app, path: "/graphql"});
 
-    app.get("/", (req, res) => {
-        res.send("server is running");
-    });
+//     app.get("/", (req, res) => {
+//         res.send("server is running");
+//     });
 
-    app.listen(5000, () => {
-        console.log("server is running");
-    });
-}
+//     app.listen(5000, () => {
+//         console.log("server is running");
+//     });
+// }
 
-startApolloServer(typeDefs, resolvers)
-    .then((res) => {
-        console.log(res);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+// startApolloServer(typeDefs, resolvers)
+//     .then((res) => {
+//         console.log(res);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
+
+app.get("/", (req, res) => {
+    res.send("up and running");
+});
+
+app.use("/graphql", graphqlHTTP({
+    schema: schema,
+    graphiql: true,
+    rootValue: resolvers,
+}));
+
+
+app.listen(5000, () => {
+    console.log("running on 5000");
+});
 
 module.exports = app;

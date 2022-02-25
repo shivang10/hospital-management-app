@@ -1,12 +1,12 @@
-const {gql} = require("apollo-server");
+// const {gql} = require("apollo-server");
 
-const typeDefs = gql`
+const typeDefs =`
     type User{
         id:ID!
-        name:String!
-        username:String!
-        password:String!
-        age:Int!
+        name:String
+        username:String
+        password:String
+        age:Int
         address: String
         phoneNumber: Int
         careTakerName: String
@@ -43,9 +43,9 @@ const typeDefs = gql`
 
     type Query{
         users: [User!]!
-        user(username: String!): User!
+        user(username: String!, password: String!): User!
         doctors: [Doctor!]!
-        doctor(username: String!): Doctor!
+        doctor(username: String!, password: String!): Doctor!
     }
 
     type Mutation{
