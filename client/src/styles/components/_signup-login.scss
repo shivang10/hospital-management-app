@@ -1,88 +1,100 @@
 h1 {
-    font-size: 2.25rem;
-    font-weight: 700;
-}
-h2{
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-a{
-    text-decoration: none;
-    color: $color-theme-1;
-    &:hover{
-        text-decoration: underline;
-    }
+  font-size: 2.25rem;
+  font-weight: 700;
 }
 
-.split-screen{
-    display: flex;
-    flex-direction: column;
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
 }
-.left, .right{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.left{
-    height: 200px;
-    background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.5))
-    , url('../../assets/doctor.jpeg');
-    background-size: cover;
 
-    .heading{
-        color: $color-white;
-        text-align: center;
-    }
-    p{
-        font-weight: 400;
-    }
+a {
+  text-decoration: none;
+  color: $color-theme-1;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
-.right{
-    .heading{
-        color: $color-black;
-        text-align: center;
+
+.split-screen {
+  display: flex;
+  flex-direction: column;
+}
+
+.left, .right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left {
+  height: 200px;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('../../assets/doctor.jpeg');
+  background-size: cover;
+
+  .heading {
+    color: $color-white;
+    text-align: center;
+  }
+
+  p {
+    font-weight: 400;
+  }
+}
+
+.right {
+  .heading {
+    color: $color-black;
+    text-align: center;
+  }
+
+  p {
+    margin: 1.5em 0;
+    font-size: 0.8rem;
+  }
+
+  .form {
+    width: 328px;
+
+    span {
+      color: red;
+      font-size: 0.7rem;
     }
-    p{
-        margin: 1.5em 0;
-        font-size: 0.8rem;
-    }
-    .form{
-        width: 328px;
-        span{
-            color: red;
-            font-size: 0.7rem;
-        }
-    }
+  }
 }
 
 @media screen and (min-width: 900px) {
-    .split-screen {
-        flex-direction: row;
-        height: 100vh;
-    }
-    .left, .right{
-        display: flex;
-        width: 50%;
-        height: auto;
-    }
-}
-.doctor-checkbox-label{
-    padding-right: 30px;
-}
-.patient-checkbox-label{
-    padding-right: 30px;
+  .split-screen {
+    flex-direction: row;
+    height: 100vh;
+  }
+  .left, .right {
+    display: flex;
+    width: 50%;
+    height: auto;
+  }
 }
 
-[type = "checkbox"]{
-    vertical-align: middle;
-    margin-right: 8px;
+.doctor-checkbox-label {
+  padding-right: 30px;
 }
 
-.submit-button{
-    text-align: center;
-    button{
-        width: 90%;
-        margin-top: 20px;
-        border-radius: 8px;
-    }
+.patient-checkbox-label {
+  padding-right: 30px;
+}
+
+[type = "checkbox"] {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.submit-button {
+  text-align: center;
+
+  button {
+    width: 90%;
+    margin-top: 20px;
+    border-radius: 8px;
+  }
 }
