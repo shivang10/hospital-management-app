@@ -19,6 +19,13 @@ const Login: React.FC = () => {
         password: ""
     });
 
+    const [authErrors, setAuthErrors] = useState({
+        username: "",
+        password: ""
+    });
+
+    const [isSubmit, setIsSubmit] = useState(false);
+
     const [fetchUser] = useLazyQuery(AUTH_USER);
 
     const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -28,13 +35,33 @@ const Login: React.FC = () => {
         });
     };
 
+    const validate = (authDetails:UserLoginDetailsInterface) =>{
+        const errors = {name: "", username: "", age: "", password: ""};
+        if(!authDetails.username){
+            errors.username = "Username is Required";
+        }
+        if(!authDetails.password){
+            errors.password = "Password is Required";
+        }
+        if(errors.username == "" && errors.password == ""){
+            setIsSubmit(true);
+        }
+        else{
+            setIsSubmit(false);
+        }
+        return errors;
+    };
+
     const handleLogin = () => {
-        fetchUser({
-            variables:{
-                username: authDetails.username,
-                password: authDetails.password
-            },
-        });
+        setAuthErrors(validate(authDetails));
+        if(isSubmit){
+            fetchUser({
+                variables:{
+                    username: authDetails.username,
+                    password: authDetails.password
+                },
+            });
+        }
     };
 
     return(
@@ -54,17 +81,25 @@ const Login: React.FC = () => {
                         </div>
                     </section>
                     <div>
-                        <label className="input-label">UserName</label>
+                        <label className="input-label">UserName</label><span>{authErrors.username}</span>
                         <input className="input-text-width-100" type="text" placeholder="UserName" name="username" onChange={handleChange}/>
                     </div>
                     <div>
-                        <label className="input-label">Password</label>
+                        <label className="input-label">Password</label><span>{authErrors.password}</span>
                         <input className="input-text-width-100" type="password" placeholder="Password" name="password" onChange={handleChange}/>
                     </div>
                     <div>
-                        <input className="input-checkbox" type="checkbox"/>
+                        <label className="doctor-checkbox-label">
+                            <input className="input-checkbox" type="checkbox" checked = {true} name="doctorCheckbox" onChange={handleChange}/>Doctor
+                        </label>
+                    
+                        <label className="patient-checkbox-label">
+                            <input className="input-checkbox" type="checkbox" checked = {false} name="patientCheckbox" onChange={handleChange}/>Patient
+                        </label>
                     </div>
-                    <button className="btn-add-16px" onClick={handleLogin}>Login</button>
+                    <div className="submit-button">
+                        <button className="btn-add-16px" onClick={handleLogin}>Login</button>
+                    </div>
                 </div>
             </div>
         </div>

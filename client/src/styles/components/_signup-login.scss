@@ -48,6 +48,10 @@ a{
     }
     .form{
         width: 328px;
+        span{
+            color: red;
+            font-size: 0.7rem;
+        }
     }
 }
 
@@ -60,5 +64,25 @@ a{
         display: flex;
         width: 50%;
         height: auto;
+    }
+}
+.doctor-checkbox-label{
+    padding-right: 30px;
+}
+.patient-checkbox-label{
+    padding-right: 30px;
+}
+
+[type = "checkbox"]{
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.submit-button{
+    text-align: center;
+    button{
+        width: 90%;
+        margin-top: 20px;
+        border-radius: 8px;
     }
 }
