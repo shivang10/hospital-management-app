@@ -75,9 +75,9 @@ const resolvers = {
             const processedUserData = processInputData(user, userSchemaFields);
             const userId = user.id;
             return new Promise((resolve, reject) => {
-                UserSchema.findOneAndReplace(
+                UserSchema.findOneAndUpdate(
                     {_id: userId},
-                    {$set: {processedUserData}},
+                    {$set: processedUserData},
                     {upsert: true, new: true},
                     (err, result) => {
                         if (err) {
@@ -116,9 +116,9 @@ const resolvers = {
             const processedUserData = processInputData(doctor, doctorSchemaFields);
             const userId = doctor.id;
             return new Promise((resolve, reject) => {
-                DoctorSchema.findOneAndReplace(
+                DoctorSchema.findOneAndUpdate(
                     {_id: userId},
-                    {$set: {processedUserData}},
+                    {$set: processedUserData},
                     {upsert: true, new: true},
                     (err, result) => {
                         if (err) {
@@ -150,10 +150,10 @@ const resolvers = {
             const processDepartmentData = processInputData(department, departmentSchemaFields);
             const departmentId = department.id;
             return new Promise((resolve, reject) => {
-                DoctorSchema.findOneAndReplace(
+                DoctorSchema.findOneAndUpdate(
                     {_id: departmentId},
-                    {$set: {processDepartmentData}},
-                    {upsert: true, new: true},
+                    {$set: processDepartmentData},
+                    {new: true},
                     (err, result) => {
                         if (err) {
                             reject(err);
