@@ -4,9 +4,8 @@ const typeDefs = gql`
     type User{
         id:ID!
         name:String!
-        username:String!
-        password:String!
-        age:Int!
+        username:String
+        age:Int
         address: String
         phoneNumber: Int
         careTakerName: String
@@ -19,14 +18,22 @@ const typeDefs = gql`
     type Doctor {
         id: ID!
         name: String!
-        username: String!
-        password: String!
-        age: Int!
-        address: String!
-        phoneNumber: Int!
+        username: String
+        password: String
+        age: Int
+        address: String
+        phoneNumber: Int
         gender: Gender
-        speciality: String!
-        domain: String!
+        speciality: String
+        domain: String
+    }
+    
+    type Department {
+        id: ID
+        departmentName: String!
+        departmentHead: String
+        departmentDoctors: [String]
+        departmentFacilities: [String]
     }
     
     enum Gender {
@@ -46,6 +53,7 @@ const typeDefs = gql`
         user(username: String!): User!
         doctors: [Doctor!]!
         doctor(username: String!): Doctor!
+        departments: [Department!]!
     }
 
     type Mutation{
@@ -53,6 +61,8 @@ const typeDefs = gql`
         updateUser(input: UpdateUserInput!): User
         createDoctor(input: CreateDoctorInput!): Doctor
         updateDoctor(input: UpdateDoctorInput!): Doctor
+        createDepartment(input: CreateDepartmentInput!): Department
+        updateDepartment(input: UpdateDepartmentInput!): Department        
     }
     
     input CreateUserInput{
@@ -95,6 +105,21 @@ const typeDefs = gql`
         gender: Gender
         speciality: String
         domain: String
+    }
+    
+    input CreateDepartmentInput {
+        departmentName: String!
+        departmentHead: String
+        departmentDoctors: [String]
+        departmentFacilities: [String]
+    }
+    
+    input UpdateDepartmentInput {
+        id: ID!
+        departmentName: String
+        departmentHead: String
+        departmentDoctors: [String]
+        departmentFacilities: [String]
     }
 
     input IdentityProofInput {

@@ -1,9 +1,12 @@
-const {UserSchema} = require("../mongoDbSchema/UserSchema.js");
-const {DoctorSchema} = require("../mongoDbSchema/DoctorSchema");
-const {processInputData} = require("../functions/processUserData");
+const UserSchema = require("../mongoDbSchema/UserSchema.js");
+const DoctorSchema = require("../mongoDbSchema/DoctorSchema");
+const DepartmentSchema = require("../mongoDbSchema/DepartmentSchema");
+const processInputData = require("../functions/processInputData");
 const bcrypt = require("bcryptjs");
 const userSchemaFields = require("../constants/userSchemaFields");
 const doctorSchemaFields = require("../constants/doctorSchemaFields");
+const departmentSchemaFields = require("../constants/departmentSchemaFields");
+
 
 const resolvers = {
     Query: {
@@ -29,6 +32,17 @@ const resolvers = {
                             reject(user);
                         }
                     });
+                });
+            });
+        },
+        departments: () => {
+            return new Promise((resolve, reject) => {
+                DepartmentSchema.find((err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(result);
+                    }
                 });
             });
         },
@@ -105,6 +119,40 @@ const resolvers = {
                 DoctorSchema.findOneAndReplace(
                     {_id: userId},
                     {$set: {processedUserData}},
+                    {upsert: true, new: true},
+                    (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    },
+                );
+            });
+        },
+        createDepartment: (parent, args) => {
+            const department = args.input;
+            const processDepartmentData = processInputData(department, departmentSchemaFields);
+            const newDepartment = new DepartmentSchema(processDepartmentData);
+            department.id = newDepartment._id;
+            return new Promise((resolve, reject) => {
+                newDepartment.save((err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(newDepartment);
+                    }
+                });
+            });
+        },
+        updateDepartment: (parent, args) => {
+            const department = args.input;
+            const processDepartmentData = processInputData(department, departmentSchemaFields);
+            const departmentId = department.id;
+            return new Promise((resolve, reject) => {
+                DoctorSchema.findOneAndReplace(
+                    {_id: departmentId},
+                    {$set: {processDepartmentData}},
                     {upsert: true, new: true},
                     (err, result) => {
                         if (err) {
