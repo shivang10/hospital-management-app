@@ -5,6 +5,7 @@ const typeDefs = gql`
         id:ID!
         name:String!
         username:String
+        password: String
         age:Int
         address: String
         phoneNumber: Int
@@ -89,7 +90,7 @@ const typeDefs = gql`
 
     type Query {
         users: [User!]!
-        user(username: String!): User!
+        user(username: String!, password: String!): User!
         userBookAppointment(id: ID!): User!
         doctors: [Doctor!]!
         doctor(username: String!): Doctor!
@@ -135,7 +136,6 @@ const typeDefs = gql`
     }
     
     input CreateDoctorInput {
-        id: ID!
         name: String!
         username: String!
         password: String!
