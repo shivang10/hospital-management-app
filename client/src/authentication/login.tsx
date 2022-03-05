@@ -14,8 +14,13 @@ const Login: React.FC = () => {
 
     const [authErrors, setAuthErrors] = useState({
         username: "",
-        password: ""
+        password: "",
+        check: ""
     });
+
+    const [isDoctorChecked, setIsDoctorChecked] = useState(false);
+
+    const [isPatientChecked, setIsPatientChecked] = useState(false);
 
     const [isSubmit, setIsSubmit] = useState(false);
 
@@ -29,14 +34,19 @@ const Login: React.FC = () => {
     };
 
     const validate = (authDetails: UserLoginDetailsInterface) => {
-        const errors = {name: "", username: "", age: "", password: ""};
+        const errors = {username: "",password: "", check: ""};
         if (!authDetails.username) {
             errors.username = "Username is Required";
         }
         if (!authDetails.password) {
             errors.password = "Password is Required";
+        
         }
-        if (errors.username == "" && errors.password == "") {
+        if(!isDoctorChecked && !isPatientChecked){
+            errors.check = "Please select one option";
+        }
+
+        if (errors.username == "" && errors.password == "" && errors.check == "") {
             setIsSubmit(true);
         } else {
             setIsSubmit(false);
@@ -47,13 +57,28 @@ const Login: React.FC = () => {
     const handleLogin = () => {
         setAuthErrors(validate(authDetails));
         if (isSubmit) {
-            fetchUser({
-                variables: {
-                    username: authDetails.username,
-                    password: authDetails.password
-                },
-            });
+            if(isDoctorChecked){
+                // LOGIN TO DOCTOR HERE
+            }
+            else if(isPatientChecked){
+                fetchUser({
+                    variables: {
+                        username: authDetails.username,
+                        password: authDetails.password
+                    },
+                });
+            }
         }
+    };
+
+    const handleDoctorChange = () => {
+        setIsDoctorChecked(!isDoctorChecked);
+        setIsPatientChecked(isDoctorChecked);
+    };
+
+    const handlePatientChange = () => {
+        setIsPatientChecked(!isPatientChecked);
+        setIsDoctorChecked(isPatientChecked);
     };
 
     return (
@@ -84,14 +109,16 @@ const Login: React.FC = () => {
                     </div>
                     <div>
                         <label className="doctor-checkbox-label">
-                            <input className="input-checkbox" type="checkbox" checked={true} name="doctorCheckbox"
-                                onChange={handleChange}/>Doctor
+                            <input className="input-checkbox" type="checkbox" checked={isDoctorChecked} id="doctorCheckbox" name="doctorCheckbox"
+                                onChange={handleDoctorChange}/>Doctor
                         </label>
 
                         <label className="patient-checkbox-label">
-                            <input className="input-checkbox" type="checkbox" checked={false} name="patientCheckbox"
-                                onChange={handleChange}/>Patient
+                            <input className="input-checkbox" type="checkbox" checked={isPatientChecked} id="patientCheckbox" name="patientCheckbox"
+                                onChange={handlePatientChange}/>Patient
                         </label>
+                        <br/>
+                        <span>{authErrors.check}</span>
                     </div>
                     <div className="submit-button">
                         <button className="btn-add-16px" onClick={handleLogin}>Login</button>

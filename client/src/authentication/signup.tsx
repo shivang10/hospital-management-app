@@ -18,11 +18,13 @@ const SignUp: React.FC = () => {
         name: "",
         username: "",
         age: "",
-        password: ""
+        password: "",
+        check: ""
     });
 
-    let doctorSelected = false;
-    let patientSelected = false;
+    const [isDoctorChecked, setIsDoctorChecked] = useState(false);
+
+    const [isPatientChecked, setIsPatientChecked] = useState(false);
 
     const [isSubmit, setIsSubmit] = useState(false);
 
@@ -36,7 +38,7 @@ const SignUp: React.FC = () => {
     };
 
     const validate = (userDetails: UserSignupDetailsInterface) => {
-        const errors = {name: "", username: "", age: "", password: ""};
+        const errors = {name: "", username: "", age: "", password: "", check: ""};
         if (!userDetails.name) {
             errors.name = "Name is Required";
         } else if (userDetails.name.length > 50) {
@@ -59,8 +61,11 @@ const SignUp: React.FC = () => {
         } else if (userDetails.age > 120) {
             errors.age = "Please enter a valid age";
         }
+        if(!isDoctorChecked && !isPatientChecked){
+            errors.check = "Please select one option";
+        }
 
-        if (errors.name == "" && errors.username == "" && errors.password == "" && errors.age == "") {
+        if (errors.name == "" && errors.username == "" && errors.password == "" && errors.age == "" && errors.check == "") {
             setIsSubmit(true);
         } else {
             setIsSubmit(false);
@@ -70,32 +75,33 @@ const SignUp: React.FC = () => {
 
     const handleCreateUser = () => {
         setUserErrors(validate(userDetails));
-        if (isSubmit) {
-            createUser({
-                variables: {
-                    input: {
-                        name: userDetails.name,
-                        username: userDetails.username,
-                        age: Number(userDetails.age),
-                        password: userDetails.password
+        if(isSubmit){
+            if(isDoctorChecked){
+                // CREATE DOCTOR USER HERE
+            }
+            else if(isPatientChecked){
+                createUser({
+                    variables: {
+                        input: {
+                            name: userDetails.name,
+                            username: userDetails.username,
+                            age: Number(userDetails.age),
+                            password: userDetails.password
+                        }
                     }
-                }
-            });
-
-
+                });
+            }
         }
     };
 
     const handleDoctorChange = () => {
-        if (!patientSelected) {
-            doctorSelected = !doctorSelected;
-        }
+        setIsDoctorChecked(!isDoctorChecked);
+        setIsPatientChecked(isDoctorChecked);
     };
 
     const handlePatientChange = () => {
-        if (!doctorSelected) {
-            patientSelected = !patientSelected;
-        }
+        setIsPatientChecked(!isPatientChecked);
+        setIsDoctorChecked(isPatientChecked);
     };
 
     return (
@@ -137,14 +143,16 @@ const SignUp: React.FC = () => {
 
                     <div>
                         <label className="doctor-checkbox-label">
-                            <input className="input-checkbox" type="checkbox" name="doctorCheckbox"
+                            <input className="input-checkbox" type="checkbox" checked={isDoctorChecked} id="doctorCheckbox" name="doctorCheckbox"
                                 onChange={handleDoctorChange}/>Doctor
                         </label>
 
                         <label className="patient-checkbox-label">
-                            <input className="input-checkbox" type="checkbox" name="patientCheckbox"
+                            <input className="input-checkbox" type="checkbox" checked={isPatientChecked} id="patientCheckbox" name="patientCheckbox"
                                 onChange={handlePatientChange}/>Patient
                         </label>
+                        <br/>
+                        <span>{userErrors.check}</span>
                     </div>
                     <div className="submit-button">
                         <button className="btn-add-16px" onClick={handleCreateUser}>Create User</button>
