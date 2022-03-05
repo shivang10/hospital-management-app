@@ -44,8 +44,8 @@ const Homepage: React.FC = () => {
                             <p className="doctor-card-body">
                                 Click on the button and go to Doctors Sign Up Panel
                             </p>
-                            <Link to="signUp" className="card-button">Sign Up</Link>
-                            <Link to="login" className="card-button">Login</Link>
+                            <Link to="signUp#doctor" className="card-button">Sign Up</Link>
+                            <Link to="login#doctor" className="card-button">Login</Link>
                         </div>
                     </div>
                 </div>
@@ -57,8 +57,8 @@ const Homepage: React.FC = () => {
                             <p className="patient-card-body">
                                 Click on the button to go to Patient Login panel
                             </p>
-                            <Link to="signUp" className="card-button">Sign Up</Link>
-                            <Link to="login" className="card-button">Login</Link>
+                            <Link to="signUp#patient" className="card-button">Sign Up</Link>
+                            <Link to="login#patient" className="card-button">Login</Link>
                         </div>
                     </div>
                 </div>

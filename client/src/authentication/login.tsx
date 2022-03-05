@@ -1,28 +1,28 @@
 import React, {useState} from "react";
 
 import {useLazyQuery} from "@apollo/client";
+import {Link,useLocation} from "react-router-dom";
 
 import {UserLoginDetailsInterface} from "./authInterface";
 import {AUTH_USER} from "./loginGqlQuery";
 
+const validationInitialState = {
+    username: "",
+    password: ""
+};
+
 const Login: React.FC = () => {
+
+    const {hash} = useLocation();
 
     const [authDetails, setAuthDetails] = useState<UserLoginDetailsInterface>({
         username: "",
         password: ""
     });
 
-    const [authErrors, setAuthErrors] = useState({
-        username: "",
-        password: "",
-        check: ""
-    });
+    const [authErrors, setAuthErrors] = useState(validationInitialState);
 
-    const [isDoctorChecked, setIsDoctorChecked] = useState(false);
-
-    const [isPatientChecked, setIsPatientChecked] = useState(false);
-
-    const [isSubmit, setIsSubmit] = useState(false);
+    const [isPatientChecked, setIsPatientChecked] = useState(hash === "#patient");
 
     const [fetchUser] = useLazyQuery(AUTH_USER);
 
@@ -42,22 +42,19 @@ const Login: React.FC = () => {
             errors.password = "Password is Required";
         
         }
-        if(!isDoctorChecked && !isPatientChecked){
-            errors.check = "Please select one option";
-        }
 
         if (errors.username == "" && errors.password == "" && errors.check == "") {
-            setIsSubmit(true);
+            setAuthErrors(validationInitialState);
+            return true;
         } else {
-            setIsSubmit(false);
+            setAuthErrors(errors);
+            return false;
         }
-        return errors;
     };
 
     const handleLogin = () => {
-        setAuthErrors(validate(authDetails));
-        if (isSubmit) {
-            if(isDoctorChecked){
+        if (validate(authDetails)) {
+            if(!isPatientChecked){
                 // LOGIN TO DOCTOR HERE
             }
             else if(isPatientChecked){
@@ -71,14 +68,8 @@ const Login: React.FC = () => {
         }
     };
 
-    const handleDoctorChange = () => {
-        setIsDoctorChecked(!isDoctorChecked);
-        setIsPatientChecked(isDoctorChecked);
-    };
-
     const handlePatientChange = () => {
         setIsPatientChecked(!isPatientChecked);
-        setIsDoctorChecked(isPatientChecked);
     };
 
     return (
@@ -94,7 +85,7 @@ const Login: React.FC = () => {
                     <section className="heading">
                         <h2>Log In</h2>
                         <div className="login-container">
-                            <p>New User?<a href="/signUp"><strong>Sign Up</strong></a></p>
+                            <p>New User?<Link to="signUp"><strong>Sign Up</strong></Link></p>
                         </div>
                     </section>
                     <div>
@@ -109,16 +100,14 @@ const Login: React.FC = () => {
                     </div>
                     <div>
                         <label className="doctor-checkbox-label">
-                            <input className="input-checkbox" type="checkbox" checked={isDoctorChecked} id="doctorCheckbox" name="doctorCheckbox"
-                                onChange={handleDoctorChange}/>Doctor
+                            <input className="input-checkbox" type="checkbox" checked={!isPatientChecked} id="doctorCheckbox" name="doctorCheckbox"
+                                onChange={handlePatientChange}/>Doctor
                         </label>
 
                         <label className="patient-checkbox-label">
                             <input className="input-checkbox" type="checkbox" checked={isPatientChecked} id="patientCheckbox" name="patientCheckbox"
                                 onChange={handlePatientChange}/>Patient
                         </label>
-                        <br/>
-                        <span>{authErrors.check}</span>
                     </div>
                     <div className="submit-button">
                         <button className="btn-add-16px" onClick={handleLogin}>Login</button>

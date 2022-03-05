@@ -1,7 +1,6 @@
 export interface UserSignupDetailsInterface {
     name: string,
     username: string,
-    age: number,
     password: string
 }
 

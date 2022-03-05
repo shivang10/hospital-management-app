@@ -1,32 +1,30 @@
 import React, {useState} from "react";
 
 import {useMutation} from "@apollo/client";
+import {Link, useLocation} from "react-router-dom";
 
 import {UserSignupDetailsInterface} from "./authInterface";
 import {CREATE_USER_MUTATION} from "./signUpGqlQuery";
 
+const validationInitialState = {
+    name: "",
+    username: "",
+    password: "",
+};
+
 const SignUp: React.FC = () => {
+
+    const {hash} = useLocation();
 
     const [userDetails, setUserDetails] = useState<UserSignupDetailsInterface>({
         name: "",
         username: "",
-        age: 0,
         password: "",
     });
 
-    const [userErrors, setUserErrors] = useState({
-        name: "",
-        username: "",
-        age: "",
-        password: "",
-        check: ""
-    });
+    const [authErrors, setAuthError] = useState(validationInitialState);
 
-    const [isDoctorChecked, setIsDoctorChecked] = useState(false);
-
-    const [isPatientChecked, setIsPatientChecked] = useState(false);
-
-    const [isSubmit, setIsSubmit] = useState(false);
+    const [isPatientChecked, setIsPatientChecked] = useState(hash === "#patient");
 
     const [createUser] = useMutation(CREATE_USER_MUTATION);
 
@@ -56,36 +54,25 @@ const SignUp: React.FC = () => {
         } else if (userDetails.password.length < 4) {
             errors.password = "Password should be atleast 4 characters";
         }
-        if (!userDetails.age) {
-            errors.age = "Age is Required";
-        } else if (userDetails.age > 120) {
-            errors.age = "Please enter a valid age";
-        }
-        if(!isDoctorChecked && !isPatientChecked){
-            errors.check = "Please select one option";
-        }
-
-        if (errors.name == "" && errors.username == "" && errors.password == "" && errors.age == "" && errors.check == "") {
-            setIsSubmit(true);
+        if (errors.name == "" && errors.username == "" && errors.password == "") {
+            setAuthError(validationInitialState);
+            return true;
         } else {
-            setIsSubmit(false);
+            setAuthError(errors);
+            return false;
         }
-        return errors;
     };
 
     const handleCreateUser = () => {
-        setUserErrors(validate(userDetails));
-        if(isSubmit){
-            if(isDoctorChecked){
+        if (validate(userDetails)) {
+            if (!isPatientChecked) {
                 // CREATE DOCTOR USER HERE
-            }
-            else if(isPatientChecked){
+            } else if (isPatientChecked) {
                 createUser({
                     variables: {
                         input: {
                             name: userDetails.name,
                             username: userDetails.username,
-                            age: Number(userDetails.age),
                             password: userDetails.password
                         }
                     }
@@ -94,14 +81,8 @@ const SignUp: React.FC = () => {
         }
     };
 
-    const handleDoctorChange = () => {
-        setIsDoctorChecked(!isDoctorChecked);
-        setIsPatientChecked(isDoctorChecked);
-    };
-
     const handlePatientChange = () => {
         setIsPatientChecked(!isPatientChecked);
-        setIsDoctorChecked(isPatientChecked);
     };
 
     return (
@@ -117,42 +98,36 @@ const SignUp: React.FC = () => {
                     <section className="heading">
                         <h2>Sign Up</h2>
                         <div className="login-container">
-                            <p>Already have an account?<a href="/login"><strong>Log In</strong></a></p>
+                            <p>Already have an account?<Link to="login"><strong>Log In</strong></Link></p>
                         </div>
                     </section>
                     <div>
-                        <label className="input-label">Name</label><span>{userErrors.name}</span>
+                        <label className="input-label">Name</label><span>{authErrors.name}</span>
                         <input className="input-text-width-100" type="text" placeholder="Name" name="name"
                             onChange={handleChange}/>
                     </div>
                     <div>
-                        <label className="input-label">Username</label><span>{userErrors.username}</span>
+                        <label className="input-label">Username</label><span>{authErrors.username}</span>
                         <input className="input-text-width-100" type="text" placeholder="UserName" name="username"
                             onChange={handleChange}/>
                     </div>
                     <div>
-                        <label className="input-label">Password</label><span>{userErrors.password}</span>
+                        <label className="input-label">Password</label><span>{authErrors.password}</span>
                         <input className="input-text-width-100" type="password" placeholder="Password" name="password"
                             onChange={handleChange}/>
                     </div>
                     <div>
-                        <label className="input-label">Age</label><span>{userErrors.age}</span>
-                        <input className="input-text-width-100" type="number" placeholder="Age" name="age"
-                            onChange={handleChange}/>
-                    </div>
-
-                    <div>
                         <label className="doctor-checkbox-label">
-                            <input className="input-checkbox" type="checkbox" checked={isDoctorChecked} id="doctorCheckbox" name="doctorCheckbox"
-                                onChange={handleDoctorChange}/>Doctor
+                            <input className="input-checkbox" type="checkbox" checked={!isPatientChecked}
+                                id="doctorCheckbox" name="doctorCheckbox"
+                                onChange={handlePatientChange}/>Doctor
                         </label>
 
                         <label className="patient-checkbox-label">
-                            <input className="input-checkbox" type="checkbox" checked={isPatientChecked} id="patientCheckbox" name="patientCheckbox"
+                            <input className="input-checkbox" type="checkbox" checked={isPatientChecked}
+                                id="patientCheckbox" name="patientCheckbox"
                                 onChange={handlePatientChange}/>Patient
                         </label>
-                        <br/>
-                        <span>{userErrors.check}</span>
                     </div>
                     <div className="submit-button">
                         <button className="btn-add-16px" onClick={handleCreateUser}>Create User</button>
