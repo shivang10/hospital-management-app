@@ -16,6 +16,8 @@ const userSchema = new mongoose.Schema({
         contentType: String,
         required: false,
     },
+    appointments: {type: Array, required: false},
+    diagnosedWith: {type: Array, required: false},
 });
 
 const UserSchema = mongoose.model("UserSchema", userSchema);

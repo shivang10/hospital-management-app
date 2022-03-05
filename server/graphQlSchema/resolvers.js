@@ -35,6 +35,22 @@ const resolvers = {
                 });
             });
         },
+        userBookAppointment: (parent, args) => {
+            const user = args.input;
+            console.log(user);
+        },
+        doctorViewAppointments: (parent, args) => {
+            const doctor = args.input;
+            return new Promise((resolve, reject) => {
+                DoctorSchema.find({doctor}, (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(reject);
+                    }
+                });
+            });
+        },
         departments: () => {
             return new Promise((resolve, reject) => {
                 DepartmentSchema.find((err, result) => {
@@ -44,6 +60,24 @@ const resolvers = {
                         resolve(result);
                     }
                 });
+            });
+        },
+        departmentDetails: (parent, args) => {
+            const department = args.input;
+            const departmentId = department.id;
+            return new Promise((resolve, reject) => {
+                DepartmentSchema.findOne(
+                    {_id: departmentId},
+                    {},
+                    {},
+                    (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    },
+                );
             });
         },
     },
@@ -109,6 +143,31 @@ const resolvers = {
                         resolve(newDoctor);
                     }
                 });
+            });
+        },
+        doctorAppointmentTimings: (parent, args) => {
+            const doctor = args.input;
+            const doctorId = doctor.id;
+            return new Promise((resolve, reject) => {
+                DoctorSchema.findOneAndUpdate(
+                    {_id: doctorId},
+                    {
+                        $push: {
+                            appointmentTimings: {
+                                $each: [doctor],
+                                $position: 0,
+                            },
+                        },
+                    },
+                    {$upsert: true, new: true},
+                    (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    },
+                );
             });
         },
         updateDoctor: (parent, args) => {
