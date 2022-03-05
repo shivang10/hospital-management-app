@@ -1,7 +1,7 @@
 const {gql} = require("apollo-server");
 
 const typeDefs = gql`
-    type User{
+    type User {
         id:ID!
         name:String!
         username:String
@@ -13,6 +13,16 @@ const typeDefs = gql`
         gender: Gender
         weight: Int
         identityProof: IdentityProofType
+        diagnosedWith: [String]
+        appointments: [userAppointment]
+    }
+    
+    type userAppointment {
+        id: ID!
+        doctorId: String
+        date: String
+        time: String
+        departmentId: String
     }
     
     type Doctor {
@@ -25,12 +35,41 @@ const typeDefs = gql`
         phoneNumber: Int
         gender: Gender
         speciality: String
-        domain: String
+        department: String
+        appointmentTimings: [doctorAppointmentTimings]
+        scheduledAppointment: [doctorScheduledAppointments]
+    }
+    
+    type DoctorViewAppointments {
+        id: ID!
+        name: String!
+        scheduledAppointment: [doctorScheduledAppointments]
+    }
+    
+    type doctorAppointmentTimings {
+        availableDay: String
+        availableTime: String
+    }
+    
+    type doctorScheduledAppointments {
+        id: ID
+        patientId: String
+        charges: String
+        date: String
+        time: String
     }
     
     type Department {
         id: ID
         departmentName: String!
+        departmentHead: String
+        departmentDoctors: [String]
+        departmentFacilities: [String]
+    }
+    
+    type DepartmentDetails {
+        id: ID!
+        departmentName: String
         departmentHead: String
         departmentDoctors: [String]
         departmentFacilities: [String]
@@ -48,31 +87,39 @@ const typeDefs = gql`
         contentType: String
     }
 
-    type Query{
+    type Query {
         users: [User!]!
         user(username: String!): User!
+        userBookAppointment(id: ID!): User!
         doctors: [Doctor!]!
         doctor(username: String!): Doctor!
+        doctorViewAppointments(id: ID!): Doctor!
         departments: [Department!]!
+        departmentDetails(input: DepartmentDetails!): Department!
     }
 
-    type Mutation{
+    type Mutation {
         createUser(input: CreateUserInput!): User
-        updateUser(input: UpdateUserInput!): User
+        updateUser(input: UpdateUserInput!, password: String!): User
         createDoctor(input: CreateDoctorInput!): Doctor
-        updateDoctor(input: UpdateDoctorInput!): Doctor
+        updateDoctor(input: UpdateDoctorInput!, password: String!): Doctor
+        doctorAppointmentTimings(input: DoctorAppointmentTimings): Doctor
         createDepartment(input: CreateDepartmentInput!): Department
         updateDepartment(input: UpdateDepartmentInput!): Department        
     }
     
-    input CreateUserInput{
+    input DepartmentDetails {
+        id: ID!
+    }
+    
+    input CreateUserInput {
         name:String!
         username:String!
         password:String!
         age:Int!
     }
     
-    input UpdateUserInput{
+    input UpdateUserInput {
         id:ID!
         name:String
         username:String
@@ -94,7 +141,7 @@ const typeDefs = gql`
         password: String!
     }
     
-    input UpdateDoctorInput{
+    input UpdateDoctorInput {
         id: ID!
         name: String
         username: String
@@ -104,7 +151,13 @@ const typeDefs = gql`
         phoneNumber: Int
         gender: Gender
         speciality: String
-        domain: String
+        department: String
+    }
+    
+    input DoctorAppointmentTimings {
+        id: ID!
+        availableDay: String!
+        availableTime: String!
     }
     
     input CreateDepartmentInput {
