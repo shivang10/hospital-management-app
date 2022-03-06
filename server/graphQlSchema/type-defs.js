@@ -87,13 +87,22 @@ const typeDefs = gql`
         data: String
         contentType: String
     }
+    
+    type UserAuthPayload {
+        token: String!
+        user: User!
+    }
+    
+    type DoctorAuthPayload {
+        token: String!
+        user: Doctor!
+    }
 
     type Query {
-        users: [User!]!
-        user(username: String!, password: String!): User!
+        userLogin(username: String!, password: String!): UserAuthPayload!
         userBookAppointment(id: ID!): User!
         doctors: [Doctor!]!
-        doctor(username: String!, password: String!): Doctor!
+        doctorLogin(username: String!, password: String!): DoctorAuthPayload!
         doctorViewAppointments(id: ID!): Doctor!
         departments: [Department!]!
         departmentDetails(input: DepartmentDetails!): Department!

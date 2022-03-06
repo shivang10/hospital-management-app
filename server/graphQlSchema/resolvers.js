@@ -3,25 +3,17 @@ const DoctorSchema = require("../mongoDbSchema/DoctorSchema");
 const DepartmentSchema = require("../mongoDbSchema/DepartmentSchema");
 const processInputData = require("../functions/processInputData");
 const bcrypt = require("bcryptjs");
+const dotenv = require("dotenv");
 const userSchemaFields = require("../constants/userSchemaFields");
 const doctorSchemaFields = require("../constants/doctorSchemaFields");
 const departmentSchemaFields = require("../constants/departmentSchemaFields");
+const jwt = require("jsonwebtoken");
 
+dotenv.config();
 
 const resolvers = {
     Query: {
-        users: () => {
-            return new Promise((resolve, reject) => {
-                UserSchema.find((err, friends) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(friends);
-                    }
-                });
-            });
-        },
-        user: (parent, args) => {
+        userLogin: (parent, args) => {
             const username = args.username;
             return new Promise((resolve, reject) => {
                 UserSchema.findOne({username}).exec()
@@ -29,7 +21,12 @@ const resolvers = {
                         bcrypt.compare(args.password, user.password)
                             .then((compareResult) => {
                                 if (compareResult) {
-                                    resolve(user);
+                                    const token = jwt.sign({id: user._id, username: user.username, type: "user"}, process.env.JWT_SECRET);
+                                    const res = {
+                                        token,
+                                        user,
+                                    };
+                                    resolve(res);
                                 } else {
                                     reject(user);
                                 }
@@ -37,18 +34,22 @@ const resolvers = {
                     });
             });
         },
-        doctor: (parent, args) => {
+        doctorLogin: (parent, args) => {
             const username = args.username;
-            const password = args.password;
             return new Promise((resolve, reject) => {
                 DoctorSchema.findOne({username}).exec()
-                    .then((doctor) => {
-                        bcrypt.compare(password, doctor.password)
-                            .then((result) => {
-                                if (result) {
-                                    resolve(doctor);
+                    .then((user) => {
+                        bcrypt.compare(args.password, user.password)
+                            .then((compareResult) => {
+                                if (compareResult) {
+                                    const token = jwt.sign({id: user._id, username: user.username, type: "doctor"}, process.env.JWT_SECRET);
+                                    const res = {
+                                        token,
+                                        user,
+                                    };
+                                    resolve(res);
                                 } else {
-                                    reject(doctor);
+                                    reject(user);
                                 }
                             });
                     });
