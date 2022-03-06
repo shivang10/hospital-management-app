@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 
 import {useLazyQuery} from "@apollo/client";
-import {Link,useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 import {UserLoginDetailsInterface} from "./authInterface";
-import {AUTH_USER} from "./loginGqlQuery";
+import {AUTH_DOCTOR_LOGIN, AUTH_USER} from "./loginGqlQuery";
 
 const validationInitialState = {
     username: "",
@@ -25,6 +25,7 @@ const Login: React.FC = () => {
     const [isPatientChecked, setIsPatientChecked] = useState(hash === "#patient");
 
     const [fetchUser] = useLazyQuery(AUTH_USER);
+    const [fetchDoctor] = useLazyQuery(AUTH_DOCTOR_LOGIN);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAuthDetails({
@@ -34,13 +35,12 @@ const Login: React.FC = () => {
     };
 
     const validate = (authDetails: UserLoginDetailsInterface) => {
-        const errors = {username: "",password: "", check: ""};
+        const errors = {username: "", password: "", check: ""};
         if (!authDetails.username) {
             errors.username = "Username is Required";
         }
         if (!authDetails.password) {
             errors.password = "Password is Required";
-        
         }
 
         if (errors.username == "" && errors.password == "" && errors.check == "") {
@@ -54,15 +54,13 @@ const Login: React.FC = () => {
 
     const handleLogin = () => {
         if (validate(authDetails)) {
-            if(!isPatientChecked){
-                // LOGIN TO DOCTOR HERE
-            }
-            else if(isPatientChecked){
+            if (!isPatientChecked) {
+                fetchDoctor({
+                    variables: authDetails
+                });
+            } else if (isPatientChecked) {
                 fetchUser({
-                    variables: {
-                        username: authDetails.username,
-                        password: authDetails.password
-                    },
+                    variables: authDetails,
                 });
             }
         }
@@ -100,12 +98,14 @@ const Login: React.FC = () => {
                     </div>
                     <div>
                         <label className="doctor-checkbox-label">
-                            <input className="input-checkbox" type="checkbox" checked={!isPatientChecked} id="doctorCheckbox" name="doctorCheckbox"
+                            <input className="input-checkbox" type="checkbox" checked={!isPatientChecked}
+                                id="doctorCheckbox" name="doctorCheckbox"
                                 onChange={handlePatientChange}/>Doctor
                         </label>
 
                         <label className="patient-checkbox-label">
-                            <input className="input-checkbox" type="checkbox" checked={isPatientChecked} id="patientCheckbox" name="patientCheckbox"
+                            <input className="input-checkbox" type="checkbox" checked={isPatientChecked}
+                                id="patientCheckbox" name="patientCheckbox"
                                 onChange={handlePatientChange}/>Patient
                         </label>
                     </div>

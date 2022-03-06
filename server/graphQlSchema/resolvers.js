@@ -24,15 +24,34 @@ const resolvers = {
         user: (parent, args) => {
             const username = args.username;
             return new Promise((resolve, reject) => {
-                UserSchema.findOne({username}).exec().then((user) => {
-                    bcrypt.compare(args.password, user.password).then((compareResult) => {
-                        if (compareResult) {
-                            resolve(user);
-                        } else {
-                            reject(user);
-                        }
+                UserSchema.findOne({username}).exec()
+                    .then((user) => {
+                        bcrypt.compare(args.password, user.password)
+                            .then((compareResult) => {
+                                if (compareResult) {
+                                    resolve(user);
+                                } else {
+                                    reject(user);
+                                }
+                            });
                     });
-                });
+            });
+        },
+        doctor: (parent, args) => {
+            const username = args.username;
+            const password = args.password;
+            return new Promise((resolve, reject) => {
+                DoctorSchema.findOne({username}).exec()
+                    .then((doctor) => {
+                        bcrypt.compare(password, doctor.password)
+                            .then((result) => {
+                                if (result) {
+                                    resolve(doctor);
+                                } else {
+                                    reject(doctor);
+                                }
+                            });
+                    });
             });
         },
         userBookAppointment: (parent, args) => {

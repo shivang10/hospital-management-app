@@ -3,7 +3,7 @@ const {gql} = require("apollo-server");
 const typeDefs = gql`
     type User {
         id:ID!
-        name:String!
+        name:String
         username:String
         password: String
         age:Int
@@ -28,7 +28,7 @@ const typeDefs = gql`
     
     type Doctor {
         id: ID!
-        name: String!
+        name: String
         username: String
         password: String
         age: Int
@@ -93,7 +93,7 @@ const typeDefs = gql`
         user(username: String!, password: String!): User!
         userBookAppointment(id: ID!): User!
         doctors: [Doctor!]!
-        doctor(username: String!): Doctor!
+        doctor(username: String!, password: String!): Doctor!
         doctorViewAppointments(id: ID!): Doctor!
         departments: [Department!]!
         departmentDetails(input: DepartmentDetails!): Department!
