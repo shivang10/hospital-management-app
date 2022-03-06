@@ -1,17 +1,17 @@
 import {gql} from "@apollo/client";
 
-export const AUTH_USER = gql`
+export const AUTH_USER_LOGIN = gql`
     query User($username: String!, $password: String!) {
-        user(username: $username, password: $password) {
-            username
+        userLogin(username: $username, password: $password) {
+            token
         }
     }
 `;
 
 export const AUTH_DOCTOR_LOGIN = gql`
     query Doctor($username: String!, $password: String!) {
-        doctor(username: $username, password: $password) {
-            username
+        doctorLogin(username: $username, password: $password) {
+            token
         }
     }
 `;

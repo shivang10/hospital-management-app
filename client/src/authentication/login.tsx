@@ -4,7 +4,7 @@ import {useLazyQuery} from "@apollo/client";
 import {Link, useLocation} from "react-router-dom";
 
 import {UserLoginDetailsInterface} from "./authInterface";
-import {AUTH_DOCTOR_LOGIN, AUTH_USER} from "./loginGqlQuery";
+import {AUTH_DOCTOR_LOGIN, AUTH_USER_LOGIN} from "./loginGqlQuery";
 
 const validationInitialState = {
     username: "",
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
 
     const [isPatientChecked, setIsPatientChecked] = useState(hash === "#patient");
 
-    const [fetchUser] = useLazyQuery(AUTH_USER);
+    const [fetchUser] = useLazyQuery(AUTH_USER_LOGIN);
     const [fetchDoctor] = useLazyQuery(AUTH_DOCTOR_LOGIN);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
