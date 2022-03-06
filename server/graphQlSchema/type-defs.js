@@ -95,7 +95,7 @@ const typeDefs = gql`
     
     type DoctorAuthPayload {
         token: String!
-        user: Doctor!
+        doctor: Doctor!
     }
 
     type Query {
@@ -109,9 +109,9 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        createUser(input: CreateUserInput!): User
+        createUser(input: CreateUserInput!): UserAuthPayload
         updateUser(input: UpdateUserInput!, password: String!): User
-        createDoctor(input: CreateDoctorInput!): Doctor
+        createDoctor(input: CreateDoctorInput!): DoctorAuthPayload
         updateDoctor(input: UpdateDoctorInput!, password: String!): Doctor
         doctorAppointmentTimings(input: DoctorAppointmentTimings): Doctor
         createDepartment(input: CreateDepartmentInput!): Department
@@ -126,7 +126,6 @@ const typeDefs = gql`
         name:String!
         username:String!
         password:String!
-        age:Int!
     }
     
     input UpdateUserInput {

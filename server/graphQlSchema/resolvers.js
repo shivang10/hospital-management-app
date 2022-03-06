@@ -38,18 +38,18 @@ const resolvers = {
             const username = args.username;
             return new Promise((resolve, reject) => {
                 DoctorSchema.findOne({username}).exec()
-                    .then((user) => {
-                        bcrypt.compare(args.password, user.password)
+                    .then((doctor) => {
+                        bcrypt.compare(args.password, doctor.password)
                             .then((compareResult) => {
                                 if (compareResult) {
-                                    const token = jwt.sign({id: user._id, username: user.username, type: "doctor"}, process.env.JWT_SECRET);
+                                    const token = jwt.sign({id: doctor._id, username: doctor.username, type: "doctor"}, process.env.JWT_SECRET);
                                     const res = {
                                         token,
-                                        user,
+                                        doctor,
                                     };
                                     resolve(res);
                                 } else {
-                                    reject(user);
+                                    reject(doctor);
                                 }
                             });
                     });
@@ -103,23 +103,28 @@ const resolvers = {
     },
     Mutation: {
         createUser: (parent, args) => {
-            const user = args.input;
+            const newUser = args.input;
             const saltRounds = bcrypt.genSaltSync(10);
-            const pwd = bcrypt.hashSync(user.password, saltRounds);
+            const pwd = bcrypt.hashSync(newUser.password, saltRounds);
 
-            const newUser = new UserSchema({
-                name: user.name,
-                username: user.username,
-                age: user.age,
+            const user = new UserSchema({
+                name: newUser.name,
+                username: newUser.username,
+                age: newUser.age,
                 password: pwd,
             });
-            user.id = newUser._id;
+            newUser.id = user._id;
             return new Promise((resolve, reject) => {
-                newUser.save((err) => {
+                user.save((err) => {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(newUser);
+                        const token = jwt.sign({id: user._id, username: user.username, type: "user"}, process.env.JWT_SECRET);
+                        const res = {
+                            token,
+                            user,
+                        };
+                        resolve(res);
                     }
                 });
             });
@@ -144,23 +149,28 @@ const resolvers = {
             });
         },
         createDoctor: (parent, args) => {
-            const doctor = args.input;
+            const newDoctor = args.input;
             const saltRounds = bcrypt.genSaltSync(10);
-            const pwd = bcrypt.hashSync(doctor.password, saltRounds);
+            const pwd = bcrypt.hashSync(newDoctor.password, saltRounds);
 
-            const newDoctor = new DoctorSchema({
-                name: doctor.name,
-                username: doctor.username,
+            const doctor = new DoctorSchema({
+                name: newDoctor.name,
+                username: newDoctor.username,
                 password: pwd,
             });
 
-            doctor.id = newDoctor._id;
+            newDoctor.id = doctor._id;
             return new Promise((resolve, reject) => {
-                newDoctor.save((err) => {
+                doctor.save((err) => {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(newDoctor);
+                        const token = jwt.sign({id: doctor._id, username: doctor.username, type: "user"}, process.env.JWT_SECRET);
+                        const res = {
+                            token,
+                            doctor,
+                        };
+                        resolve(res);
                     }
                 });
             });
