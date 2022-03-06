@@ -7,3 +7,11 @@ export const CREATE_USER_MUTATION = gql`
         }
     }
 `;
+
+export const CREATE_DOCTOR_MUTATION = gql`
+    mutation createDoctor($input: CreateDoctorInput!){
+        createUser(input: $input) {
+            name
+        }
+    }
+`;

@@ -4,7 +4,7 @@ import {useMutation} from "@apollo/client";
 import {Link, useLocation} from "react-router-dom";
 
 import {UserSignupDetailsInterface} from "./authInterface";
-import {CREATE_USER_MUTATION} from "./signUpGqlQuery";
+import {CREATE_DOCTOR_MUTATION, CREATE_USER_MUTATION} from "./signUpGqlQuery";
 
 const validationInitialState = {
     name: "",
@@ -13,7 +13,6 @@ const validationInitialState = {
 };
 
 const SignUp: React.FC = () => {
-
     const {hash} = useLocation();
 
     const [userDetails, setUserDetails] = useState<UserSignupDetailsInterface>({
@@ -27,6 +26,7 @@ const SignUp: React.FC = () => {
     const [isPatientChecked, setIsPatientChecked] = useState(hash === "#patient");
 
     const [createUser] = useMutation(CREATE_USER_MUTATION);
+    const [createDoctor] = useMutation(CREATE_DOCTOR_MUTATION);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUserDetails({
@@ -66,7 +66,15 @@ const SignUp: React.FC = () => {
     const handleCreateUser = () => {
         if (validate(userDetails)) {
             if (!isPatientChecked) {
-                // CREATE DOCTOR USER HERE
+                createDoctor({
+                    variables: {
+                        input: {
+                            name: userDetails.name,
+                            username: userDetails.username,
+                            password: userDetails.password
+                        }
+                    }
+                });
             } else if (isPatientChecked) {
                 createUser({
                     variables: {
@@ -130,7 +138,7 @@ const SignUp: React.FC = () => {
                         </label>
                     </div>
                     <div className="submit-button">
-                        <button className="btn-add-16px" onClick={handleCreateUser}>Create User</button>
+                        <button className="btn-add-16px" onClick={handleCreateUser}>Create Account</button>
                     </div>
                 </div>
             </div>
