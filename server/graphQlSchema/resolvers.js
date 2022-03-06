@@ -165,7 +165,7 @@ const resolvers = {
                     if (err) {
                         reject(err);
                     } else {
-                        const token = jwt.sign({id: doctor._id, username: doctor.username, type: "user"}, process.env.JWT_SECRET);
+                        const token = jwt.sign({id: doctor._id, username: doctor.username, type: "doctor"}, process.env.JWT_SECRET);
                         const res = {
                             token,
                             doctor,
