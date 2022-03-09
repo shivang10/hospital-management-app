@@ -27,6 +27,12 @@
     align-items: center;
 
     &-link {
+      text-decoration: none;
+      color: $color-white;
+
+      &:hover {
+        text-decoration: none;
+      }
     }
   }
 }
