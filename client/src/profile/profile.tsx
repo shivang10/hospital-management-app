@@ -6,8 +6,8 @@ import PatientProfile from "./patientProfile";
 
 const MyProfile: React.FC = () => {
 
-    const tokenDetails = getUserDetails();
-    const profileType = tokenDetails["type"] === "doctor" ? <DoctorProfile/> : <PatientProfile/>;
+    const userType = getUserDetails()["type"];
+    const profileType = userType === "doctor" ? <DoctorProfile/> : <PatientProfile/>;
 
     return (
         <div>
