@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 
 import {useMutation, useQuery} from "@apollo/client";
 
-import {getUserDetails} from "../utils/tokenDetails";
+import {getUserDetails} from "../../utils/tokenDetails";
 import {PATIENT_DETAILS} from "./getPatientDetailsGqlQuery";
 import {gender, PatientProfileInterface} from "./profileInterface";
 import {UPDATE_PATIENT_DETAILS} from "./updatePatientDetailsGqlQuery";
