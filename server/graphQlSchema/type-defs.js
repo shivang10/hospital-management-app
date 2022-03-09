@@ -41,12 +41,6 @@ const typeDefs = gql`
         scheduledAppointment: [doctorScheduledAppointments]
     }
     
-    type DoctorViewAppointments {
-        id: ID!
-        name: String!
-        scheduledAppointment: [doctorScheduledAppointments]
-    }
-    
     type doctorAppointmentTimings {
         availableDay: String
         availableTime: String
@@ -63,14 +57,6 @@ const typeDefs = gql`
     type Department {
         id: ID
         departmentName: String!
-        departmentHead: String
-        departmentDoctors: [String]
-        departmentFacilities: [String]
-    }
-    
-    type DepartmentDetails {
-        id: ID!
-        departmentName: String
         departmentHead: String
         departmentDoctors: [String]
         departmentFacilities: [String]
@@ -101,7 +87,6 @@ const typeDefs = gql`
     type Query {
         userLogin(username: String!, password: String!): UserAuthPayload!
         userBookAppointment(id: ID!): User!
-        doctors: [Doctor!]!
         doctorLogin(username: String!, password: String!): DoctorAuthPayload!
         doctorViewAppointments(id: ID!): Doctor!
         departments: [Department!]!

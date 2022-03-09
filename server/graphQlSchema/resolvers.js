@@ -14,44 +14,75 @@ dotenv.config();
 const resolvers = {
     Query: {
         userLogin: (parent, args) => {
-            const username = args.username;
+            const {username, password} = args;
             return new Promise((resolve, reject) => {
-                UserSchema.findOne({username}).exec()
-                    .then((user) => {
-                        bcrypt.compare(args.password, user.password)
-                            .then((compareResult) => {
-                                if (compareResult) {
-                                    const token = jwt.sign({id: user._id, username: user.username, type: "user"}, process.env.JWT_SECRET);
-                                    const res = {
-                                        token,
-                                        user,
-                                    };
-                                    resolve(res);
-                                } else {
-                                    reject(user);
-                                }
-                            });
+                UserSchema.findOne(
+                    {username},
+                    {},
+                    {},
+                    (err, user) => {
+                        if (err) {
+                            reject(new Error("Wrong username"));
+                        } else {
+                            if (user) {
+                                bcrypt.compare(password, user.password)
+                                    .then((compareResult) => {
+                                        if (compareResult) {
+                                            const token = jwt.sign({
+                                                id: user._id,
+                                                username: user.username,
+                                                type: "user",
+                                            }, process.env.JWT_SECRET);
+                                            const res = {
+                                                token,
+                                                user,
+                                            };
+                                            resolve(res);
+                                        } else {
+                                            reject(new Error("Wrong username or password"));
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        console.log("error", error);
+                                    });
+                            } else {
+                                reject(new Error("Wrong username"));
+                            }
+                        }
                     });
             });
         },
         doctorLogin: (parent, args) => {
-            const username = args.username;
+            const {username, password} = args;
             return new Promise((resolve, reject) => {
-                DoctorSchema.findOne({username}).exec()
-                    .then((doctor) => {
-                        bcrypt.compare(args.password, doctor.password)
-                            .then((compareResult) => {
-                                if (compareResult) {
-                                    const token = jwt.sign({id: doctor._id, username: doctor.username, type: "doctor"}, process.env.JWT_SECRET);
-                                    const res = {
-                                        token,
-                                        doctor,
-                                    };
-                                    resolve(res);
-                                } else {
-                                    reject(doctor);
-                                }
-                            });
+                DoctorSchema.findOne({username},
+                    {},
+                    {},
+                    (err, doctor) => {
+                        if (err) {
+                            reject(new Error("Wrong username"));
+                        } else {
+                            if (doctor) {
+                                bcrypt.compare(password, doctor.password)
+                                    .then((compareResult) => {
+                                        if (compareResult) {
+                                            const token = jwt.sign({id: doctor._id, username: doctor.username, type: "doctor"}, process.env.JWT_SECRET);
+                                            const res = {
+                                                token,
+                                                doctor,
+                                            };
+                                            resolve(res);
+                                        } else {
+                                            reject(new Error("Wrong username or password"));
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        console.log("error", error);
+                                    });
+                            } else {
+                                reject(new Error("Wrong username"));
+                            }
+                        }
                     });
             });
         },
@@ -66,7 +97,7 @@ const resolvers = {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(reject);
+                        resolve(result);
                     }
                 });
             });
