@@ -2,8 +2,8 @@ import React from "react";
 
 import Navbar from "../navbar/navbar";
 import {getUserDetails} from "../utils/tokenDetails";
-import DoctorDashboard from "./doctorDashboard";
-import PatientDashboard from "./patientDashboard";
+import DoctorDashboard from "./doctor/doctorDashboard";
+import PatientDashboard from "./patient/patientDashboard";
 
 const Dashboard: React.FC = () => {
 

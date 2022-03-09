@@ -1,8 +1,8 @@
 import React from "react";
 
 import {getUserDetails} from "../utils/tokenDetails";
-import DoctorProfile from "./doctorProfile";
-import PatientProfile from "./patientProfile";
+import DoctorProfile from "./doctor/doctorProfile";
+import PatientProfile from "./patient/patientProfile";
 
 const MyProfile: React.FC = () => {
 

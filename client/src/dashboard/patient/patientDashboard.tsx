@@ -1,7 +1,7 @@
 import React from "react";
 
 const PatientDashboard: React.FC = () => {
-    return(
+    return (
         <div>
             Patient Dashboard
         </div>
