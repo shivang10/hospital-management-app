@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {useMutation, useQuery} from "@apollo/client";
 
@@ -21,15 +21,30 @@ const PatientProfile: React.FC = () => {
     const [updatePatient] = useMutation(UPDATE_PATIENT_DETAILS);
 
     const [patientDetails, updatePatientDetails] = useState<PatientProfileInterface>({
-        name: patientDetailsQuery?.data?.name,
-        gender: patientDetailsQuery?.data?.gender,
-        age: patientDetailsQuery?.data?.age,
-        address: patientDetailsQuery?.data?.address,
-        careTakerName: patientDetailsQuery?.data?.careTakerName,
-        careTakerNumber: patientDetailsQuery?.data?.careTakerNumber,
-        phoneNumber: patientDetailsQuery?.data?.phoneNumber,
-        weight: patientDetailsQuery?.data?.weight
+        name: patientDetailsQuery?.data?.userLogin?.user?.name,
+        gender: patientDetailsQuery?.data?.userLogin?.user?.gender,
+        age: patientDetailsQuery?.data?.userLogin?.user?.age,
+        address: patientDetailsQuery?.data?.userLogin?.user?.address,
+        careTakerName: patientDetailsQuery?.data?.userLogin?.user?.careTakerName,
+        careTakerNumber: patientDetailsQuery?.data?.userLogin?.user?.careTakerNumber,
+        phoneNumber: patientDetailsQuery?.data?.userLogin?.user?.phoneNumber,
+        weight: patientDetailsQuery?.data?.userLogin?.user?.weight
     });
+
+    useEffect(() => {
+        if (patientDetailsQuery?.data) {
+            updatePatientDetails({
+                name: patientDetailsQuery?.data?.userLogin?.user?.name,
+                gender: patientDetailsQuery?.data?.userLogin?.user?.gender,
+                age: patientDetailsQuery?.data?.userLogin?.user?.age,
+                address: patientDetailsQuery?.data?.userLogin?.user?.address,
+                careTakerName: patientDetailsQuery?.data?.userLogin?.user?.careTakerName,
+                careTakerNumber: patientDetailsQuery?.data?.userLogin?.user?.careTakerNumber,
+                phoneNumber: patientDetailsQuery?.data?.userLogin?.user?.phoneNumber,
+                weight: patientDetailsQuery?.data?.userLogin?.user?.weight
+            });
+        }
+    }, [patientDetailsQuery?.data]);
 
     if (patientDetailsQuery.loading) {
         return <div>Loading</div>;
@@ -162,7 +177,7 @@ const PatientProfile: React.FC = () => {
                     />
                 </div>
                 <div className="submit-button">
-                    <button className="btn-add-16px" type="submit">Login</button>
+                    <button className="btn-add-16px" type="submit">Update</button>
                 </div>
             </form>
         </div>
