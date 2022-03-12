@@ -8,10 +8,15 @@ const userSchemaFields = require("../constants/userSchemaFields");
 const doctorSchemaFields = require("../constants/doctorSchemaFields");
 const departmentSchemaFields = require("../constants/departmentSchemaFields");
 const jwt = require("jsonwebtoken");
+const AppointmentTimingsSchema = require("../mongoDbSchema/AppointmentTimingsSchema.js");
+const ScheduledAppointmentsSchema = require("../mongoDbSchema/ScheduledAppointmentsSchema.js");
+const {GraphQLJSON, GraphQLJSONObject} = require("graphql-type-json");
 
 dotenv.config();
 
 const resolvers = {
+    JSON: GraphQLJSON,
+    JSONObject: GraphQLJSONObject,
     Query: {
         userLogin: (parent, args) => {
             const {username, password} = args;
@@ -31,6 +36,7 @@ const resolvers = {
                                             const token = jwt.sign({
                                                 id: user._id,
                                                 username: user.username,
+                                                password: user.password,
                                                 type: "user",
                                             }, process.env.JWT_SECRET);
                                             const res = {
@@ -66,7 +72,7 @@ const resolvers = {
                                 bcrypt.compare(password, doctor.password)
                                     .then((compareResult) => {
                                         if (compareResult) {
-                                            const token = jwt.sign({id: doctor._id, username: doctor.username, type: "doctor"}, process.env.JWT_SECRET);
+                                            const token = jwt.sign({id: doctor._id, username: doctor.username, password: doctor.password, type: "doctor"}, process.env.JWT_SECRET);
                                             const res = {
                                                 token,
                                                 doctor,
@@ -86,22 +92,6 @@ const resolvers = {
                     });
             });
         },
-        userBookAppointment: (parent, args) => {
-            const user = args.input;
-            console.log(user);
-        },
-        doctorViewAppointments: (parent, args) => {
-            const doctor = args.input;
-            return new Promise((resolve, reject) => {
-                DoctorSchema.find({doctor}, (err, result) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(result);
-                    }
-                });
-            });
-        },
         departments: () => {
             return new Promise((resolve, reject) => {
                 DepartmentSchema.find((err, result) => {
@@ -113,24 +103,69 @@ const resolvers = {
                 });
             });
         },
-        departmentDetails: (parent, args) => {
-            const department = args.input;
-            const departmentId = department.id;
+        departmentDoctorsTimings: (parent, args) => {
+            const {ids} = args;
             return new Promise((resolve, reject) => {
-                DepartmentSchema.findOne(
-                    {_id: departmentId},
+                AppointmentTimingsSchema.find({doctorId: {$in: ids}},
                     {},
                     {},
-                    (err, result) => {
-                        if (err) {
-                            reject(err);
+                    (errors, doctors) => {
+                        if (doctors) {
+                            resolve(doctors);
                         } else {
-                            resolve(result);
+                            reject(errors);
                         }
-                    },
-                );
+                    });
             });
         },
+        userAppointments: (parent, args) => {
+            const {id} = args;
+            return new Promise((resolve, reject) => {
+                ScheduledAppointmentsSchema.find({patientId: id},
+                    {},
+                    {},
+                    (errors, appointment) => {
+                        if (appointment) {
+                            resolve(appointment);
+                        } else {
+                            reject(errors);
+                        }
+                    });
+            });
+        },
+        // bookAppointment: (parent, args) => {
+        //     const {department, timeSlot} = args;
+        //     DoctorSchema.find({department: department},
+        //         {appointmentTimings: 1},
+        //         {},
+        //         (error, doctors) => {
+        //             if (doctors) {
+        //                 console.log(timeSlot);
+        //                 console.log(doctors);
+        //                 resolve(doctors);
+        //             } else {
+        //                 reject(error);
+        //             }
+        //         });
+        // },
+        // departmentDetails: (parent, args) => {
+        //     const department = args.input;
+        //     const departmentId = department.id;
+        //     return new Promise((resolve, reject) => {
+        //         DepartmentSchema.findOne(
+        //             {_id: departmentId},
+        //             {},
+        //             {},
+        //             (err, result) => {
+        //                 if (err) {
+        //                     reject(err);
+        //                 } else {
+        //                     resolve(result);
+        //                 }
+        //             },
+        //         );
+        //     });
+        // },
     },
     Mutation: {
         createUser: (parent, args) => {
@@ -206,31 +241,6 @@ const resolvers = {
                 });
             });
         },
-        doctorAppointmentTimings: (parent, args) => {
-            const doctor = args.input;
-            const doctorId = doctor.id;
-            return new Promise((resolve, reject) => {
-                DoctorSchema.findOneAndUpdate(
-                    {_id: doctorId},
-                    {
-                        $push: {
-                            appointmentTimings: {
-                                $each: [doctor],
-                                $position: 0,
-                            },
-                        },
-                    },
-                    {$upsert: true, new: true},
-                    (err, result) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(result);
-                        }
-                    },
-                );
-            });
-        },
         updateDoctor: (parent, args) => {
             const doctor = args.input;
             const processedUserData = processInputData(doctor, doctorSchemaFields);
@@ -284,6 +294,64 @@ const resolvers = {
                 );
             });
         },
+        scheduleAppointment: (parent, args) => {
+            const newAppointment = args.input;
+            const appointment = new ScheduledAppointmentsSchema({
+                doctorId: newAppointment.doctorId,
+                doctorName: newAppointment.doctorName,
+                patientId: newAppointment.patientId,
+                patientName: newAppointment.patientName,
+                day: newAppointment.day,
+                time: newAppointment.time,
+                problem: newAppointment.problem,
+            });
+
+            newAppointment.id = appointment._id;
+            return new Promise((resolve, reject) => {
+                appointment.save((err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(appointment);
+                    }
+                });
+            });
+        },
+        // updateAppointmentTimings: (parent, args) => {
+        //     const {doctorId, day, time} = args.input;
+        //     return new Promise((resolve, reject) => {
+        //         AppointmentTimingsSchema.findOneAndUpdate(
+        //             {doctorId: doctorId},
+        //             {},
+        //             {},
+        //         );
+        //     });
+        // },
+        // doctorAppointmentTimings: (parent, args) => {
+        //     const doctor = args.input;
+        //     const doctorId = doctor.id;
+        //     return new Promise((resolve, reject) => {
+        //         DoctorSchema.findOneAndUpdate(
+        //             {_id: doctorId},
+        //             {
+        //                 $push: {
+        //                     appointmentTimings: {
+        //                         $each: [doctor],
+        //                         $position: 0,
+        //                     },
+        //                 },
+        //             },
+        //             {$upsert: true, new: true},
+        //             (err, result) => {
+        //                 if (err) {
+        //                     reject(err);
+        //                 } else {
+        //                     resolve(result);
+        //                 }
+        //             },
+        //         );
+        //     });
+        // },
     },
 };
 

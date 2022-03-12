@@ -10,8 +10,6 @@ const doctorSchema = new mongoose.Schema({
     gender: {type: String, required: false},
     speciality: {type: String, required: false},
     department: {type: String, required: false},
-    appointmentTimings: {type: Array, required: false},
-    scheduledAppointments: {type: Array, required: false},
 });
 
 const DoctorSchema = mongoose.model("DoctorSchema", doctorSchema);

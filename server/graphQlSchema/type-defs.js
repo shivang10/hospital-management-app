@@ -1,6 +1,9 @@
 const {gql} = require("apollo-server");
 
 const typeDefs = gql`
+    scalar JSON
+    scalar JSONObject
+
     type User {
         id:ID!
         name:String
@@ -15,15 +18,6 @@ const typeDefs = gql`
         weight: Int
         identityProof: IdentityProofType
         diagnosedWith: [String]
-        appointments: [userAppointment]
-    }
-    
-    type userAppointment {
-        id: ID!
-        doctorId: String
-        date: String
-        time: String
-        departmentId: String
     }
     
     type Doctor {
@@ -37,27 +31,11 @@ const typeDefs = gql`
         gender: Gender
         speciality: String
         department: String
-        appointmentTimings: [doctorAppointmentTimings]
-        scheduledAppointment: [doctorScheduledAppointments]
-    }
-    
-    type doctorAppointmentTimings {
-        availableDay: String
-        availableTime: String
-    }
-    
-    type doctorScheduledAppointments {
-        id: ID
-        patientId: String
-        charges: String
-        date: String
-        time: String
     }
     
     type Department {
         id: ID
         departmentName: String!
-        departmentHead: String
         departmentDoctors: [String]
         departmentFacilities: [String]
     }
@@ -84,12 +62,28 @@ const typeDefs = gql`
         doctor: Doctor!
     }
 
+    type DoctorsTimings {
+        doctorId: String!
+        doctorName: String!
+        appointmentTimings: JSON
+    }
+
+    type ScheduledAppointment {
+        doctorId: String!
+        doctorName: String!
+        patientId: String!
+        patientName: String!
+        day: String!
+        time: String!
+        problem: String!
+    }
+
     type Query {
         userLogin(username: String!, password: String!): UserAuthPayload!
-        userBookAppointment(id: ID!): User!
         doctorLogin(username: String!, password: String!): DoctorAuthPayload!
-        doctorViewAppointments(id: ID!): Doctor!
         departments: [Department!]!
+        departmentDoctorsTimings(ids: [String!]):[DoctorsTimings!]
+        userAppointments(id: String!): [ScheduledAppointment]
         departmentDetails(input: DepartmentDetails!): Department!
     }
 
@@ -98,9 +92,10 @@ const typeDefs = gql`
         updateUser(input: UpdateUserInput!, password: String!): User
         createDoctor(input: CreateDoctorInput!): DoctorAuthPayload
         updateDoctor(input: UpdateDoctorInput!, password: String!): Doctor
-        doctorAppointmentTimings(input: DoctorAppointmentTimings): Doctor
         createDepartment(input: CreateDepartmentInput!): Department
-        updateDepartment(input: UpdateDepartmentInput!): Department        
+        updateDepartment(input: UpdateDepartmentInput!): Department
+        scheduleAppointment(input: ScheduledAppointmentInput!): ScheduledAppointment
+        updateAppointmentTimings(input: updateAppointmentTimingsInput): String  
     }
     
     input DepartmentDetails {
@@ -147,15 +142,8 @@ const typeDefs = gql`
         department: String
     }
     
-    input DoctorAppointmentTimings {
-        id: ID!
-        availableDay: String!
-        availableTime: String!
-    }
-    
     input CreateDepartmentInput {
         departmentName: String!
-        departmentHead: String
         departmentDoctors: [String]
         departmentFacilities: [String]
     }
@@ -163,7 +151,6 @@ const typeDefs = gql`
     input UpdateDepartmentInput {
         id: ID!
         departmentName: String
-        departmentHead: String
         departmentDoctors: [String]
         departmentFacilities: [String]
     }
@@ -172,6 +159,21 @@ const typeDefs = gql`
         id: ID!
         data: String
         contentType: String
+    }
+
+    input ScheduledAppointmentInput {
+        doctorId: String!
+        doctorName: String!
+        patientId: String!
+        patientName: String!
+        day: String!
+        time: String!
+        problem: String!
+    }
+    input updateAppointmentTimingsInput {
+        doctorId: String!
+        day: String!
+        time: String!
     }
 `;
 
