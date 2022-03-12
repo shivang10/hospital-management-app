@@ -124,9 +124,15 @@ const resolvers = {
             });
         },
         userAppointments: (parent, args) => {
-            const {id} = args;
+            const {id, userType} = args;
+            const filterData = {};
+            if (userType === "doctor") {
+                filterData["doctorId"] = id;
+            } else {
+                filterData["patientId"] = id;
+            }
             return new Promise((resolve, reject) => {
-                ScheduledAppointmentsSchema.find({patientId: id},
+                ScheduledAppointmentsSchema.find(filterData,
                     {},
                     {},
                     (errors, appointment) => {
@@ -190,7 +196,11 @@ const resolvers = {
                     if (err) {
                         reject(err);
                     } else {
-                        const token = jwt.sign({id: user._id, username: user.username, type: "user"}, process.env.JWT_SECRET);
+                        const token = jwt.sign({
+                            id: user._id,
+                            username: user.username,
+                            type: "user",
+                        }, process.env.JWT_SECRET);
                         const res = {
                             token,
                             user,
@@ -236,7 +246,11 @@ const resolvers = {
                     if (err) {
                         reject(err);
                     } else {
-                        const token = jwt.sign({id: doctor._id, username: doctor.username, type: "doctor"}, process.env.JWT_SECRET);
+                        const token = jwt.sign({
+                            id: doctor._id,
+                            username: doctor.username,
+                            type: "doctor",
+                        }, process.env.JWT_SECRET);
                         const res = {
                             token,
                             doctor,
