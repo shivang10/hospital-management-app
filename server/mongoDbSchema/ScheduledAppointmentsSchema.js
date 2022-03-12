@@ -8,6 +8,7 @@ const scheduledAppointmentsSchema = new mongoose.Schema({
     day: {type: String, required: true},
     time: {type: String, required: true},
     problem: {type: String, required: true},
+    date: {type: String, required: true},
 });
 
 

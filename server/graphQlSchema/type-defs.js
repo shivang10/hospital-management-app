@@ -76,6 +76,7 @@ const typeDefs = gql`
         day: String!
         time: String!
         problem: String!
+        date: String!
     }
 
     type Query {
@@ -83,7 +84,7 @@ const typeDefs = gql`
         doctorLogin(username: String!, password: String!): DoctorAuthPayload!
         departments: [Department!]!
         departmentDoctorsTimings(ids: [String!]):[DoctorsTimings!]
-        userAppointments(id: String!): [ScheduledAppointment]
+        userAppointments(id: String!, userType: String!): [ScheduledAppointment]
         departmentDetails(input: DepartmentDetails!): Department!
     }
 
@@ -169,6 +170,7 @@ const typeDefs = gql`
         day: String!
         time: String!
         problem: String!
+        date: String!
     }
     input updateAppointmentTimingsInput {
         doctorId: String!

@@ -309,6 +309,7 @@ const resolvers = {
                 day: newAppointment.day,
                 time: newAppointment.time,
                 problem: newAppointment.problem,
+                date: newAppointment.date,
             });
 
             newAppointment.id = appointment._id;
