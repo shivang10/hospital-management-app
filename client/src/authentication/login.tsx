@@ -60,7 +60,7 @@ const Login: React.FC = () => {
                     variables: authDetails
                 })
                     .then((res) => {
-                        const token = res.data.userLogin.token;
+                        const token = res.data.doctorLogin.token;
                         localStorage.setItem("token", token);
                         history.push("/dashboard");
                     })
