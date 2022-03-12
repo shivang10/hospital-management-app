@@ -3,5 +3,8 @@ export interface PatientAppointmentInterface {
     doctorId: string,
     date: string,
     time: string,
-    departmentId: string
+    departmentId: string,
+    day: string,
+    problem: string,
+    doctorName: string,
 }

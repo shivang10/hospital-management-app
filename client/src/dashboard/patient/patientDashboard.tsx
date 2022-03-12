@@ -6,17 +6,18 @@ import {getUserDetails} from "../../utils/tokenDetails";
 import PastAppointments from "./pastAppointments";
 import {PatientAppointmentInterface} from "./patientAppointmentInterface";
 import {PATIENT_APPOINTMENTS} from "./patientAppointmentsGqlQuery";
+import {processPastAppointmentData, processUpcomingAppointmentData} from "./processAppointmentData";
 import ScheduleAppointment from "./scheduleAppointment/scheduleAppointment";
 import UpcomingAppointments from "./upcomingAppointments";
 
 
 const PatientDashboard: React.FC = () => {
-    const {username, password} = getUserDetails();
+    const {id} = getUserDetails();
 
     const patientAppointments = useQuery(PATIENT_APPOINTMENTS, {
         variables: {
-            username: username,
-            password: password
+            id: id,
+            userType: "patient"
         }
     });
 
@@ -24,31 +25,39 @@ const PatientDashboard: React.FC = () => {
         return <div>Loading</div>;
     }
     if (patientAppointments.error) {
-        return <div>Error</div>;
+        return <div>Error Dashboard</div>;
     }
 
-    const data = patientAppointments.data?.userLogin?.user;
-    const allUpcomingAppointments = data?.appointments.map((appointment: PatientAppointmentInterface) => {
-        return <UpcomingAppointments
-            key={appointment.id}
-            date={appointment.date}
-            departmentId={appointment.departmentId}
-            id={appointment.id}
-            doctorId={appointment.doctorId}
-            time={appointment.time}
-        />;
-    });
+    const data = patientAppointments.data?.userAppointments;
+    const allUpcomingAppointments = processUpcomingAppointmentData(data)
+        .map((appointment: PatientAppointmentInterface) => {
+            return <UpcomingAppointments
+                key={appointment.id}
+                date={appointment.date}
+                departmentId={appointment.departmentId}
+                id={appointment.id}
+                doctorId={appointment.doctorId}
+                time={appointment.time}
+                doctorName={appointment.doctorName}
+                problem={appointment.problem}
+                day={appointment.day}
+            />;
+        });
 
-    const allPastAppointments = data?.appointments.map((appointment: PatientAppointmentInterface) => {
-        return <PastAppointments
-            key={appointment.id}
-            date={appointment.date}
-            departmentId={appointment.departmentId}
-            id={appointment.id}
-            doctorId={appointment.doctorId}
-            time={appointment.time}
-        />;
-    });
+    const allPastAppointments = processPastAppointmentData(data)
+        .map((appointment: PatientAppointmentInterface) => {
+            return <PastAppointments
+                key={appointment.id}
+                date={appointment.date}
+                departmentId={appointment.departmentId}
+                id={appointment.id}
+                doctorId={appointment.doctorId}
+                time={appointment.time}
+                doctorName={appointment.doctorName}
+                problem={appointment.problem}
+                day={appointment.day}
+            />;
+        });
 
     return (
         <div>

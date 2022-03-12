@@ -2,15 +2,20 @@ import React from "react";
 
 import {PatientAppointmentInterface} from "./patientAppointmentInterface";
 
-const UpcomingAppointments: React.FC<PatientAppointmentInterface> = ({doctorId, date, id, departmentId, time}) => {
+const UpcomingAppointments: React.FC<PatientAppointmentInterface> = ({
+    date, id, departmentId, time,
+    day, doctorName, problem
+}) => {
     return (
         <div>
             Upcoming Appointment
             Reference Id: {id}
-            Doctor: {doctorId}
             Date: {date}
             Time: {time}
             Department: {departmentId}
+            Day: {day}
+            Doctor Name: {doctorName}
+            Problem: {problem}
         </div>
     );
 };
