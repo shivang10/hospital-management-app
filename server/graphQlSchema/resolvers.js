@@ -36,7 +36,7 @@ const resolvers = {
                                             const token = jwt.sign({
                                                 id: user._id,
                                                 username: user.username,
-                                                password: user.password,
+                                                password: password,
                                                 type: "user",
                                             }, process.env.JWT_SECRET);
                                             const res = {
@@ -72,7 +72,12 @@ const resolvers = {
                                 bcrypt.compare(password, doctor.password)
                                     .then((compareResult) => {
                                         if (compareResult) {
-                                            const token = jwt.sign({id: doctor._id, username: doctor.username, password: doctor.password, type: "doctor"}, process.env.JWT_SECRET);
+                                            const token = jwt.sign({
+                                                id: doctor._id,
+                                                username: doctor.username,
+                                                password: password,
+                                                type: "doctor",
+                                            }, process.env.JWT_SECRET);
                                             const res = {
                                                 token,
                                                 doctor,

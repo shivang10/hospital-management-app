@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 
 import {useLazyQuery} from "@apollo/client";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useHistory} from "react-router-dom";
 
 import {UserLoginDetailsInterface} from "./authInterface";
 import {AUTH_DOCTOR_LOGIN, AUTH_USER_LOGIN} from "./loginGqlQuery";
@@ -14,6 +14,7 @@ const validationInitialState = {
 const Login: React.FC = () => {
 
     const {hash} = useLocation();
+    const history = useHistory();
 
     const [authDetails, setAuthDetails] = useState<UserLoginDetailsInterface>({
         username: "",
@@ -57,11 +58,27 @@ const Login: React.FC = () => {
             if (!isPatientChecked) {
                 fetchDoctor({
                     variables: authDetails
-                });
+                })
+                    .then((res) => {
+                        const token = res.data.userLogin.token;
+                        localStorage.setItem("token", token);
+                        history.push("/dashboard");
+                    })
+                    .catch((err)  => {
+                        console.log(err);
+                    });
             } else if (isPatientChecked) {
                 fetchUser({
                     variables: authDetails,
-                });
+                })
+                    .then((res) => {
+                        const token = res.data.userLogin.token;
+                        localStorage.setItem("token", token);
+                        history.push("/dashboard");
+                    })
+                    .catch((err)  => {
+                        console.log(err);
+                    });
             }
         }
     };

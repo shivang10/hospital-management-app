@@ -11,8 +11,7 @@ import UpcomingAppointments from "./upcomingAppointments";
 
 
 const PatientDashboard: React.FC = () => {
-    const {username} = getUserDetails();
-    const password = "patien1";
+    const {username, password} = getUserDetails();
 
     const patientAppointments = useQuery(PATIENT_APPOINTMENTS, {
         variables: {

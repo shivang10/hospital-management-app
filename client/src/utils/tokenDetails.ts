@@ -8,7 +8,8 @@ export const getUserDetails = () => {
         iat: -1,
         id: "",
         type: "",
-        username: ""
+        username: "",
+        password: ""
     };
     let tokenContent: TokenInterface;
 
@@ -18,7 +19,8 @@ export const getUserDetails = () => {
             iat: tokenContent["iat"],
             id: tokenContent["id"],
             type: tokenContent["type"],
-            username: tokenContent["username"]
+            username: tokenContent["username"],
+            password: tokenContent["password"]
         };
     }
     return userDetails;

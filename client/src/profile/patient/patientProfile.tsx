@@ -8,8 +8,7 @@ import {gender, PatientProfileInterface} from "./profileInterface";
 import {UPDATE_PATIENT_DETAILS} from "./updatePatientDetailsGqlQuery";
 
 const PatientProfile: React.FC = () => {
-    const {id, username} = getUserDetails();
-    const password = "patien1";
+    const {id, username, password} = getUserDetails();
 
     const patientDetailsQuery = useQuery(PATIENT_DETAILS, {
         variables: {
