@@ -65,7 +65,7 @@ const typeDefs = gql`
     type DoctorsTimings {
         doctorId: String!
         doctorName: String!
-        appointmentTimings: JSON
+        appointmentTimings: String!
     }
 
     type ScheduledAppointment {
@@ -96,7 +96,8 @@ const typeDefs = gql`
         createDepartment(input: CreateDepartmentInput!): Department
         updateDepartment(input: UpdateDepartmentInput!): Department
         scheduleAppointment(input: ScheduledAppointmentInput!): ScheduledAppointment
-        updateAppointmentTimings(input: updateAppointmentTimingsInput): String  
+        createAppointmentTimings(input: CreateAppointmentTimingsInput!): DoctorsTimings
+        updateAppointmentTimings(input: UpdateAppointmentTimingsInput!): DoctorsTimings  
     }
     
     input DepartmentDetails {
@@ -172,10 +173,16 @@ const typeDefs = gql`
         problem: String!
         date: String!
     }
-    input updateAppointmentTimingsInput {
+    
+    input CreateAppointmentTimingsInput {
         doctorId: String!
-        day: String!
-        time: String!
+        doctorName: String!
+        appointmentTimings: String!
+    }
+    
+    input UpdateAppointmentTimingsInput {
+        doctorId: String!
+        appointmentTimings: String!
     }
 `;
 

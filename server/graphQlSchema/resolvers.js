@@ -337,16 +337,50 @@ const resolvers = {
                 });
             });
         },
-        // updateAppointmentTimings: (parent, args) => {
-        //     const {doctorId, day, time} = args.input;
-        //     return new Promise((resolve, reject) => {
-        //         AppointmentTimingsSchema.findOneAndUpdate(
-        //             {doctorId: doctorId},
-        //             {},
-        //             {},
-        //         );
-        //     });
-        // },
+        createAppointmentTimings: (parent, args) => {
+            const {doctorId, doctorName, appointmentTimings} = args.input;
+            const parsedAppointmentTimings = JSON.parse(appointmentTimings);
+            const newAppointmentTimings = new AppointmentTimingsSchema({
+                doctorId, doctorName,
+                appointmentTimings: parsedAppointmentTimings,
+            });
+            return new Promise((resolve, reject) => {
+                newAppointmentTimings.save((err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        const res = {
+                            doctorId: result["doctorId"],
+                            doctorName: result["doctorName"],
+                            appointmentTimings: JSON.stringify(result["appointmentTimings"]),
+                        };
+                        resolve(res);
+                    }
+                });
+            });
+        },
+        updateAppointmentTimings: (parent, args) => {
+            const {doctorId, appointmentTimings} = args.input;
+            return new Promise((resolve, reject) => {
+                AppointmentTimingsSchema.findOneAndUpdate(
+                    {doctorId: doctorId},
+                    {appointmentTimings: JSON.parse(appointmentTimings)},
+                    {},
+                    (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            const res = {
+                                doctorId: result["doctorId"],
+                                doctorName: result["doctorName"],
+                                appointmentTimings: JSON.stringify(result["appointmentTimings"]),
+                            };
+                            resolve(res);
+                        }
+                    },
+                );
+            });
+        },
         // doctorAppointmentTimings: (parent, args) => {
         //     const doctor = args.input;
         //     const doctorId = doctor.id;
