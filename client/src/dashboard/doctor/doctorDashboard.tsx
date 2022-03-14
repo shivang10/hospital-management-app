@@ -3,6 +3,7 @@ import React from "react";
 import {useQuery} from "@apollo/client";
 
 import {getUserDetails} from "../../utils/tokenDetails";
+import MyAppointmentTimings from "./appointmentTimings/myAppointmentTimings";
 import {DoctorAppointmentInterface} from "./doctorAppointmentInterface";
 import {DOCTOR_APPOINTMENTS} from "./doctorAppointmentsGqlQuery";
 import PastAppointments from "./pastAppointments";
@@ -63,6 +64,7 @@ const DoctorDashboard: React.FC = () => {
             Doctor Dashboard
             {allUpcomingAppointments}
             {allPastAppointments}
+            <MyAppointmentTimings />
         </div>
     );
 };
