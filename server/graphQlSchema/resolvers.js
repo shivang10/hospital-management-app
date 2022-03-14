@@ -116,8 +116,16 @@ const resolvers = {
                     {},
                     (errors, doctors) => {
                         if (doctors) {
-                            resolve(doctors);
+                            const res = doctors.map((doctor) => {
+                                return {
+                                    doctorId: doctor["doctorId"],
+                                    doctorName: doctor["doctorName"],
+                                    appointmentTimings: JSON.stringify(doctor["appointmentTimings"]),
+                                };
+                            });
+                            resolve(res);
                         } else {
+                            console.log(errors);
                             reject(errors);
                         }
                     });
@@ -144,39 +152,6 @@ const resolvers = {
                     });
             });
         },
-        // bookAppointment: (parent, args) => {
-        //     const {department, timeSlot} = args;
-        //     DoctorSchema.find({department: department},
-        //         {appointmentTimings: 1},
-        //         {},
-        //         (error, doctors) => {
-        //             if (doctors) {
-        //                 console.log(timeSlot);
-        //                 console.log(doctors);
-        //                 resolve(doctors);
-        //             } else {
-        //                 reject(error);
-        //             }
-        //         });
-        // },
-        // departmentDetails: (parent, args) => {
-        //     const department = args.input;
-        //     const departmentId = department.id;
-        //     return new Promise((resolve, reject) => {
-        //         DepartmentSchema.findOne(
-        //             {_id: departmentId},
-        //             {},
-        //             {},
-        //             (err, result) => {
-        //                 if (err) {
-        //                     reject(err);
-        //                 } else {
-        //                     resolve(result);
-        //                 }
-        //             },
-        //         );
-        //     });
-        // },
     },
     Mutation: {
         createUser: (parent, args) => {
@@ -381,31 +356,6 @@ const resolvers = {
                 );
             });
         },
-        // doctorAppointmentTimings: (parent, args) => {
-        //     const doctor = args.input;
-        //     const doctorId = doctor.id;
-        //     return new Promise((resolve, reject) => {
-        //         DoctorSchema.findOneAndUpdate(
-        //             {_id: doctorId},
-        //             {
-        //                 $push: {
-        //                     appointmentTimings: {
-        //                         $each: [doctor],
-        //                         $position: 0,
-        //                     },
-        //                 },
-        //             },
-        //             {$upsert: true, new: true},
-        //             (err, result) => {
-        //                 if (err) {
-        //                     reject(err);
-        //                 } else {
-        //                     resolve(result);
-        //                 }
-        //             },
-        //         );
-        //     });
-        // },
     },
 };
 
