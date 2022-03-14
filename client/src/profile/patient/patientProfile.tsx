@@ -95,11 +95,11 @@ const PatientProfile: React.FC = () => {
     };
 
     return (
-        <div>
-            Patient Profile
+        <div className="profile-section">
             <form onSubmit={handleSubmit}>
                 <label className="input-label">Name</label>
                 <input
+                    className="input-text-width-100"
                     name="name"
                     onChange={handleTextChange}
                     type="text"
@@ -116,6 +116,7 @@ const PatientProfile: React.FC = () => {
                 <div>
                     <label className="input-label">Age</label>
                     <input
+                        className="input-text-width-100"
                         name="age"
                         onChange={handleNumberChange}
                         type="number"
@@ -127,6 +128,7 @@ const PatientProfile: React.FC = () => {
                 <div>
                     <label className="input-label">Weight</label>
                     <input
+                        className="input-text-width-100"
                         name="weight"
                         onChange={handleNumberChange}
                         value={patientDetails.weight}
@@ -138,6 +140,7 @@ const PatientProfile: React.FC = () => {
                 <div>
                     <label className="input-label">Phone number</label>
                     <input
+                        className="input-text-width-100"
                         name="phoneNumber"
                         onChange={handleNumberChange}
                         type="number"
@@ -149,6 +152,7 @@ const PatientProfile: React.FC = () => {
                 <div>
                     <label className="input-label">Care taker name</label>
                     <input
+                        className="input-text-width-100"
                         name="careTakerName"
                         onChange={handleTextChange}
                         type="text"
@@ -158,6 +162,7 @@ const PatientProfile: React.FC = () => {
                 <div>
                     <label className="input-label">Care taker number</label>
                     <input
+                        className="input-text-width-100"
                         name="careTakerNumber"
                         onChange={handleNumberChange}
                         type="number"
@@ -169,6 +174,7 @@ const PatientProfile: React.FC = () => {
                 <div>
                     <label className="input-label">Address</label>
                     <input
+                        className="input-text-width-100"
                         name="address"
                         onChange={handleTextChange}
                         type="text"

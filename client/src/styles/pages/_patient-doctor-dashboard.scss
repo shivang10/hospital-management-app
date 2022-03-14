@@ -1,0 +1,18 @@
+.patientDashboard{
+    display: grid;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.dashboard-title{
+    margin: 10px;
+    display: grid;
+    color: $color-theme-1;
+    justify-content: center;
+}
+
+.appointment-heading{
+    margin: 10px;
+    color: $color-theme-1;
+    padding-top: 20px;
+}

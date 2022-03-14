@@ -1,0 +1,25 @@
+.simple-table{
+    border-collapse: collapse;
+    box-shadow: 0 5px 10px $color-off-white-2;
+    background-color: $color-white;
+    text-align: left;
+    overflow: hidden;
+    thead{
+        box-shadow: 0 5px 10px $color-off-white-2;
+    }
+    th{
+        color: $color-theme-1;
+        padding: 1rem 2rem;
+        letter-spacing: 0.1rem;
+        font-size: 1.1rem;
+        font-weight: 900;
+    }
+    td{
+        color: $color-theme-2;
+        padding: 1rem 2rem;
+    }
+    tr:nth-child(even){
+        background-color: $color-theme-8;
+    }
+}
+

@@ -7,16 +7,15 @@ const PastAppointments: React.FC<PatientAppointmentInterface> = ({
     day, doctorName, problem,
 }) => {
     return (
-        <div>
-            Past Appointment
-            Reference Id: {id}
-            Date: {date}
-            Time: {time}
-            Department: {departmentId}
-            Day: {day}
-            Doctor Name: {doctorName}
-            Problem: {problem}
-        </div>
+        <tr>
+            <td>{id} </td>
+            <td>{date}</td>
+            <td>{time}</td>
+            <td>{departmentId}</td>
+            <td>{day}</td>
+            <td>{doctorName}</td>
+            <td>{problem}</td>
+        </tr>
     );
 };
 
