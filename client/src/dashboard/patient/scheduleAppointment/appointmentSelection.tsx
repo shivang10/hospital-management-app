@@ -35,15 +35,21 @@ const AppointmentSelection: React.FC<AppointmentSelectionInterface> = ({
                 return !!availableAppointmentDays.includes(appointmentDay);
             })
             .map((appointmentDay) => {
-                return Object.keys(appointments[appointmentDay])
+                const daySlots = Object.keys(appointments[appointmentDay])
                     .filter((appointmentDayTime) => appointments[appointmentDay][appointmentDayTime] > 0)
                     .map((appointmentDayTime) => {
                         return (
-                            <div key={appointmentDayTime}>
-                                {appointmentDay}: {appointmentDayTime}: {appointments[appointmentDay][appointmentDayTime]}
-                            </div>
+                            <td key={appointmentDayTime}>
+                                {appointmentDayTime}
+                            </td>
                         );
                     });
+                return (
+                    <tr key={appointmentDay}>
+                        <td>{appointmentDay}</td>
+                        {daySlots}
+                    </tr>
+                );
             });
     };
 
@@ -53,8 +59,16 @@ const AppointmentSelection: React.FC<AppointmentSelectionInterface> = ({
             return <div
                 onClick={() => handleAppointmentClicked(doctor)}
                 key={doctor["doctorId"]}>
-                {doctor["doctorName"]}
-                {allAppointments}
+                <table className="simple-table">
+                    <thead>
+                        <tr>
+                            <th>{doctor["doctorName"]}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {allAppointments}
+                    </tbody>
+                </table>
             </div>;
         });
 

@@ -7,7 +7,7 @@ import MyAppointmentTimings from "./appointmentTimings/myAppointmentTimings";
 import {DoctorAppointmentInterface} from "./doctorAppointmentInterface";
 import {DOCTOR_APPOINTMENTS} from "./doctorAppointmentsGqlQuery";
 import PastAppointments from "./pastAppointments";
-import {processUpcomingAppointmentData, processPastAppointmentData} from "./processAppointmentData";
+import {processPastAppointmentData, processUpcomingAppointmentData} from "./processAppointmentData";
 import UpcomingAppointments from "./upcomingAppointments";
 
 
@@ -22,11 +22,11 @@ const DoctorDashboard: React.FC = () => {
         }
     });
 
-    if(loading) {
+    if (loading) {
         return <div>Loading</div>;
     }
 
-    if(error) {
+    if (error) {
         return <div>Error</div>;
     }
 
@@ -45,7 +45,7 @@ const DoctorDashboard: React.FC = () => {
         });
 
     const allPastAppointments = processPastAppointmentData(data?.userAppointments)
-        .map((appointment:DoctorAppointmentInterface) => {
+        .map((appointment: DoctorAppointmentInterface) => {
             return <PastAppointments
                 key={appointment.id}
                 date={appointment.date}
@@ -61,10 +61,39 @@ const DoctorDashboard: React.FC = () => {
 
     return (
         <div>
-            Doctor Dashboard
-            {allUpcomingAppointments}
-            {allPastAppointments}
-            <MyAppointmentTimings />
+            <MyAppointmentTimings/>
+            <h3 className="appointment-heading">Upcoming Appointment</h3>
+            <table className="simple-table">
+                <thead>
+                    <tr>
+                        <th>Reference Id</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Day</th>
+                        <th>Patient Name</th>
+                        <th>Problem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {allUpcomingAppointments}
+                </tbody>
+            </table>
+            <h3 className="appointment-heading">Past Appointment</h3>
+            <table className="simple-table">
+                <thead>
+                    <tr>
+                        <th>Reference Id</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Day</th>
+                        <th>Patient Name</th>
+                        <th>Problem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {allPastAppointments}
+                </tbody>
+            </table>
         </div>
     );
 };

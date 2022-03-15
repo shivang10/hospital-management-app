@@ -7,15 +7,14 @@ const UpcomingAppointments: React.FC<DoctorAppointmentInterface> = ({
     day, patientName, problem
 }) => {
     return (
-        <div>
-            Upcoming Appointment
-            Reference Id: {id}
-            Patient Name: {patientName}
-            Problem: {problem}
-            Date: {date}
-            Time: {time}
-            Day: {day}
-        </div>
+        <tr>
+            <td>{id}</td>
+            <td>{date}</td>
+            <td>{time}</td>
+            <td>{day}</td>
+            <td>{patientName}</td>
+            <td>{problem}</td>
+        </tr>
     );
 };
 

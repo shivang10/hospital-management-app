@@ -46,7 +46,7 @@ const ScheduleAppointment: React.FC = () => {
 
     return (
         <div>
-            Schedule Appointment
+            <h3 className="appointment-heading">Schedule Appointment</h3>
             <select onChange={handleChange}>{departmentOptions}</select>
             {selectedDepartmentDetails.id !== "" &&
                 <AppointmentSelection

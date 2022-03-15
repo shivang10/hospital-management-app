@@ -25,14 +25,21 @@ const MyAppointmentTimings: React.FC = () => {
     const availableTimings = (appointments: any) => {
         return Object.keys(appointments)
             .map((appointmentDay) => {
-                return Object.keys(appointments[appointmentDay])
+                const daySlots = Object.keys(appointments[appointmentDay])
+                    .filter((appointmentDayTime) => appointments[appointmentDay][appointmentDayTime] > 0)
                     .map((appointmentDayTime) => {
-                        return(
-                            <div key={appointmentDayTime}>
-                                {appointmentDay}: {appointmentDayTime}: {appointments[appointmentDay][appointmentDayTime]}
-                            </div>
+                        return (
+                            <td key={appointmentDayTime}>
+                                {appointmentDayTime}
+                            </td>
                         );
                     });
+                return (
+                    <tr key={appointmentDay}>
+                        <td>{appointmentDay}</td>
+                        {daySlots}
+                    </tr>
+                );
             });
     };
 
@@ -40,13 +47,15 @@ const MyAppointmentTimings: React.FC = () => {
         .map((doctor: MyAppointmentsInterface) => {
             const allTimeSlots = availableTimings(JSON.parse(doctor["appointmentTimings"]));
             return <div key={doctor["doctorId"]}>
-                {allTimeSlots}
+                <table className="simple-table">
+                    <tbody>{allTimeSlots}</tbody>
+                </table>
             </div>;
         });
 
-    return(
+    return (
         <div>
-            Timings
+            <h3 className="appointment-heading">My Timings</h3>
             {myTimings}
         </div>
     );

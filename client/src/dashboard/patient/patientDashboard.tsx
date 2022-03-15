@@ -61,52 +61,7 @@ const PatientDashboard: React.FC = () => {
 
     return (
         <div className="patientDashboard">
-            <div className="dashboard-title">
-                <h1>Patient Dashboard</h1>
-            </div>
-            
             <ScheduleAppointment/>
-            <table className="simple-table">
-                <thead>
-                    <tr>
-                        <th>Doctor Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Monday</td>
-                        <td>8-9</td>
-                        <td>9-10</td>
-                        <td>10-11</td>
-                        <td>11-12</td>
-                    </tr>
-                    <tr>
-                        <td>Tuesday</td>
-                        <td>8-9</td>
-                        <td>9-10</td>
-                    </tr>
-                    <tr>
-                        <td>Wednesday</td>
-                        <td>8-9</td>
-                        <td>10-11</td>
-                        <td>11-12</td>
-                    </tr>
-                    <tr>
-                        <td>Thrusday</td>
-                        <td>8-9</td>
-                        <td>9-10</td>
-                        <td>10-11</td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Friday</td>
-                        <td>8-9</td>
-                        <td>9-10</td>
-                        <td>10-11</td>
-                    </tr>
-                </tbody>
-            </table>
-
             <h3 className="appointment-heading">Upcoming Appointment</h3>
             <table className="simple-table">
                 <thead>
