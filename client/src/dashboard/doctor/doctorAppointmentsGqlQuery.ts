@@ -11,6 +11,7 @@ export const DOCTOR_APPOINTMENTS = gql`
             time
             problem
             date
+            id
         }
     }
 `;

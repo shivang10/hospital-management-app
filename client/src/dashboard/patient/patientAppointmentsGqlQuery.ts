@@ -10,6 +10,7 @@ export const PATIENT_APPOINTMENTS = gql`
             time
             problem
             date
+            id
         }
     }
 `;

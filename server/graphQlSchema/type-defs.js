@@ -69,6 +69,7 @@ const typeDefs = gql`
     }
 
     type ScheduledAppointment {
+        id: ID!
         doctorId: String!
         doctorName: String!
         patientId: String!
