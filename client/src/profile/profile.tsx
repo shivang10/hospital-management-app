@@ -1,5 +1,6 @@
 import React from "react";
 
+import Navbar from "../navbar/navbar";
 import {getUserDetails} from "../utils/tokenDetails";
 import DoctorProfile from "./doctor/doctorProfile";
 import PatientProfile from "./patient/patientProfile";
@@ -11,7 +12,7 @@ const MyProfile: React.FC = () => {
 
     return (
         <div>
-            My Profile
+            <Navbar/>
             {profileType}
         </div>
     );
